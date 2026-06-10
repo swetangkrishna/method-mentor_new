@@ -1,0 +1,94 @@
+{
+  "run_id": "S01_auto_20260527_001747_a1fa2f",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 5,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 5,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 3,
+      "confirm-competence": 2
+    },
+    "diversity_ratio": 0.4,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    3,
+    4,
+    4,
+    7
+  ],
+  "reward": {
+    "reward": 0.8986,
+    "reward_band": "EXCELLENT",
+    "task_solved": true,
+    "turns_used": 5,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.6,
+      "survey_score_normalised": 0.9,
+      "efficiency_score": 0.6429
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's concerns very well."
+    },
+    "Q2": {
+      "score": 4,
+      "comment": "Questions were generally appropriate but could be slightly more probing."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt completely safe to express her uncertainties."
+    },
+    "Q4": {
+      "score": 4,
+      "comment": "The conversation was efficient but could have used a few more turns for deeper exploration."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: guiding Mary to focus on methodological fit rather than complexity. Could be better: slightly more detailed questioning to address all of Mary's concerns."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "Mary can articulate why semi-structured interviews are appropriate for her research question about teachers' perceptions of digital tools in geography and acknowledges that surveys or mixed methods do not align as well with her specific context."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

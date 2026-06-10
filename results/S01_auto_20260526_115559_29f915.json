@@ -1,0 +1,121 @@
+{
+  "run_id": "S01_auto_20260526_115559_29f915",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "mode": "automated",
+  "task_solved": false,
+  "total_turns": 14,
+  "max_turns": 14,
+  "skill_sequence": [
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown",
+    "unknown"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown",
+      "unknown"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "challenge-assumptions",
+      "unknown"
+    ],
+    "skill_counts": {
+      "challenge-assumptions": 2,
+      "unknown": 12
+    },
+    "diversity_ratio": 0.143,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "reward": {
+    "reward": 0.3,
+    "reward_band": "POOR",
+    "task_solved": false,
+    "turns_used": 14,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 0.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.0
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The tutor/teacher clearly understood the confusion and provided appropriate explanations."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The explanations were well-calibrated to my level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "I felt completely supported and safe to make mistakes without embarrassment."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The interaction was very efficient and did not feel rushed or too long."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "I am very satisfied with this learning interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "The most helpful thing was the clear and patient explanations. It could be better if the tutor provided more real-world examples to enhance understanding."
+    }
+  },
+  "task_check": {
+    "solved": false,
+    "confidence": 0,
+    "evidence": "Yes, based on this conversation, I have completed the task of helping you draft and refine the sections for your research proposal. Here is a summary "
+  },
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "backend": "huggingface"
+}

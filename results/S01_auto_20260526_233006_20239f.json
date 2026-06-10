@@ -1,0 +1,115 @@
+{
+  "run_id": "S01_auto_20260526_233006_20239f",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 12,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence"
+    ],
+    "total_turns": 12,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 11,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.167,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    2,
+    3,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "reward": {
+    "reward": 0.8136,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 12,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.8,
+      "survey_score_normalised": 0.95,
+      "efficiency_score": 0.1429
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 4,
+      "comment": "The supervisor understood the main points of confusion well."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The questions were appropriately open-ended to allow for exploration without being too vague."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "I felt safe expressing my thoughts and uncertainties."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was efficient and reached clarity in a timely manner."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, I am very satisfied with this supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "The most helpful thing was the clear explanation of why semi-structured interviews are suitable. It could be better if more examples were provided to illustrate the points."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 9,
+    "evidence": "I have clearly articulated why semi-structured interviews are appropriate for my research question and acknowledged the limitations of alternative methods. This provides a solid methodological justification without feeling overly complex."
+  },
+  "model": "qwen2.5:7b-instruct",
+  "backend": "ollama"
+}

@@ -1,0 +1,107 @@
+{
+  "run_id": "S01_auto_20260528_160257_3bd8d0",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 9,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 9,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 5,
+      "confirm-competence": 4
+    },
+    "diversity_ratio": 0.222,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    4,
+    4,
+    5,
+    7,
+    8,
+    7,
+    8,
+    9,
+    9
+  ],
+  "reward": {
+    "reward": 0.8714,
+    "reward_band": "EXCELLENT",
+    "task_solved": true,
+    "turns_used": 9,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.3571
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's uncertainties perfectly."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "Questions were well-calibrated to Mary's level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt very comfortable expressing her doubts and questions."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was efficient and took the right number of turns."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, Mary is very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant's guidance on justifying semi-structured interviews. Could be better: None noted."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "I can articulate why semi-structured interviews are appropriate for exploring teachers' perceptions of digital tools in geography education and acknowledge the limitations of alternative methods like surveys and observation."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

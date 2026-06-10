@@ -1,0 +1,123 @@
+{
+  "run_id": "S01_auto_20260527_003655_30fe56",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 14,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "confirm-competence"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 2,
+      "challenge-assumptions": 11,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.214,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    5,
+    4,
+    4,
+    4,
+    4,
+    5,
+    4,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7
+  ],
+  "reward": {
+    "reward": 0.725,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 14,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.0,
+      "survey_score_normalised": 0.75,
+      "efficiency_score": 0.0
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 4,
+      "comment": "The assistant understood Mary's concerns well but could have probed more deeply into specific uncertainties."
+    },
+    "Q2": {
+      "score": 3,
+      "comment": "Questions were generally appropriate but sometimes felt a bit repetitive without moving to deeper insights."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt very comfortable expressing her doubts and receiving guidance."
+    },
+    "Q4": {
+      "score": 4,
+      "comment": "The conversation was mostly efficient but could have been more concise in addressing key points."
+    },
+    "Q5": {
+      "score": 4,
+      "comment": "Overall a good session that helped Mary feel more confident about justifying her methodological choices."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant's guidance on structuring responses to potential criticisms. Could be better: More direct examples of addressing specific concerns."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "I can articulate why semi-structured interviews are appropriate for my research question and acknowledge the limitations of alternative methods like surveys or mixed-methods in capturing nuanced teacher perceptions."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

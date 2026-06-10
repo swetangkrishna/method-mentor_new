@@ -1,0 +1,114 @@
+{
+  "run_id": "S01_auto_20260527_004305_f11716",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 10,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "total_turns": 10,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 1,
+      "challenge-assumptions": 3,
+      "scaffold-and-release": 5,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.4,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7,
+    8,
+    9
+  ],
+  "reward": {
+    "reward": 0.8271,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 10,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.6,
+      "survey_score_normalised": 0.9,
+      "efficiency_score": 0.2857
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's concerns perfectly."
+    },
+    "Q2": {
+      "score": 4,
+      "comment": "Questions were generally well-calibrated but could be slightly more tailored to Mary's specific level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt very comfortable expressing her uncertainties and questions."
+    },
+    "Q4": {
+      "score": 4,
+      "comment": "The conversation was efficient but could have been a bit shorter without losing clarity."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Mary is very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant provided clear examples and step-by-step guidance. Could be better: More time could have been spent on practical exercises to solidify understanding."
+    }
+  },
+  "task_check": {
+    "solved": false,
+    "confidence": 0,
+    "evidence": "Yes, based on our discussion, I believe you are ready to complete the task. You have a clear understanding of why semi-structured interviews align wel"
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

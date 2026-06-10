@@ -1,0 +1,152 @@
+{
+  "run_id": "S02_auto_20260610_101943_901bab",
+  "scenario_id": "S02",
+  "topic": "Research methods for parents' experiences of school transition",
+  "student": "John",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 14,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence",
+    "probe-intended-decisions",
+    "probe-intended-decisions"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence",
+      "probe-intended-decisions",
+      "probe-intended-decisions"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 12,
+      "confirm-competence": 2
+    },
+    "diversity_ratio": 0.143,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    2,
+    3,
+    3,
+    4,
+    4,
+    4,
+    5,
+    6,
+    5,
+    6,
+    6,
+    7,
+    6,
+    7
+  ],
+  "stage_progression": {
+    "final_stage": 2,
+    "stage_history": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2
+    ],
+    "completed_stages": [
+      1
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "user_requested_exit": false,
+    "max_stage_reached": 2
+  },
+  "reward": {
+    "reward": 0.68,
+    "reward_band": "FAIR",
+    "task_solved": true,
+    "turns_used": 14,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.0
+    },
+    "base_reward": 0.8,
+    "stage_progress_score": 0.2,
+    "max_stage_reached": 2,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood John's confusion and uncertainties well."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The questions and guidance were perfectly calibrated to John's level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "John felt completely safe expressing his uncertainty without embarrassment."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was very efficient in reaching clarity with the right number of turns."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, John is very satisfied with this supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant guided John through connecting his research question to qualitative interviews. Could be better: None noted."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "John understands why qualitative interviews are suitable for his research question and has identified key aspects to explore (emotional reactions and practical challenges). He is ready to draft a short data collection description."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

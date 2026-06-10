@@ -1,0 +1,143 @@
+"""
+analyse_results.py — Reads the SQLite DB and produces an RL analysis report.
+
+Usage:
+    python analyse_results.py [--scenario S01]
+"""
+
+import argparse
+from pathlib import Path
+from database import Database
+
+RESULTS_DIR = Path(__file__).parent / "results"
+
+
+def run(scenario_filter=None):
+    db = Database()
+
+    sessions  = db.list_sessions()
+    completed = [s for s in sessions if s["status"] == "completed"]
+    if scenario_filter:
+        completed = [s for s in completed if s["scenario_id"].startswith(scenario_filter)]
+
+    if not completed:
+        print("No completed sessions found. Run run_experiment.py first.")
+        db.close(); return
+
+    threshold = 0.65
+    high = [s for s in completed if _reward(db, s["id"]) >= threshold]
+    low  = [s for s in completed if _reward(db, s["id"]) < threshold]
+
+    lines = [
+        "# Pedagogical RL — Analysis Report",
+        f"\n**{len(completed)} completed sessions** | "
+        f"High-reward (≥{threshold}): {len(high)} | Low-reward: {len(low)}\n",
+        "---",
+        "## 1. Session Summary\n",
+        "| Run ID | Scenario | Mode | Solved | Turns | Reward | Band | Survey |",
+        "|--------|----------|------|--------|-------|--------|------|--------|",
+    ]
+
+    summary = db.session_summary_table()
+    if scenario_filter:
+        summary = [r for r in summary if r["scenario_id"].startswith(scenario_filter)]
+
+    for r in summary:
+        reward = f"{r['total_reward']:.3f}" if r["total_reward"] is not None else "—"
+        survey = f"{r['mean_survey']:.1f}" if r["mean_survey"] is not None else "—"
+        mode   = "🤖" if r["mode"] == "automated" else "👤"
+        lines.append(
+            f"| {r['id']} | {r['scenario_id']} | {mode} | "
+            f"{'✓' if r['task_solved'] else '✗'} | {r['total_turns']} | "
+            f"**{reward}** | {r['reward_band'] or '—'} | {survey} |"
+        )
+
+    lines += [
+        "\n---",
+        "## 2. Skill Frequency — High vs Low Reward Episodes\n",
+        "| Skill | All uses | Avg reward |",
+        "|-------|----------|-----------|",
+    ]
+    for sf in db.skill_frequency(scenario_filter):
+        avg = f"{sf['avg_reward']:.3f}" if sf["avg_reward"] else "—"
+        lines.append(f"| {sf['skill_name']} | {sf['uses']} | {avg} |")
+
+    lines += [
+        "\n---",
+        "## 3. Derived RL Policy — Best Skill per Turn Position\n",
+        "| Turn | Best skill | Mean reward | n |",
+        "|------|-----------|-------------|---|",
+    ]
+    policy = db.best_skill_per_turn_position(scenario_filter)
+    for pos in sorted(policy.keys()):
+        p = policy[pos]
+        lines.append(f"| {pos} | {p['skill_name']} | {p['mean_reward']:.3f} | {p['n']} |")
+
+    lines += [
+        "\n---",
+        "## 4. Human vs LLM Persona Comparison\n",
+    ]
+    human_s = [s for s in completed if s["mode"] == "human_validation"]
+    llm_s   = [s for s in completed if s["mode"] == "automated"]
+
+    def _stats(lst):
+        if not lst: return None
+        rewards = [_reward(db, s["id"]) for s in lst]
+        turns   = [s["total_turns"] for s in lst]
+        surveys = [db.survey_mean(s["id"]) for s in lst]
+        surveys = [x for x in surveys if x is not None]
+        solved  = sum(1 for s in lst if s["task_solved"])
+        return {
+            "n": len(lst), "solve_rate": f"{solved/len(lst):.0%}",
+            "mean_reward": f"{sum(rewards)/len(rewards):.3f}",
+            "mean_turns":  f"{sum(turns)/len(turns):.1f}",
+            "mean_survey": f"{sum(surveys)/len(surveys):.2f}" if surveys else "—",
+        }
+
+    hs = _stats(human_s)
+    ls = _stats(llm_s)
+
+    if hs and ls:
+        lines += [
+            "| Metric | 👤 Human | 🤖 LLM Persona |",
+            "|--------|---------|----------------|",
+            f"| N runs | {hs['n']} | {ls['n']} |",
+            f"| Solve rate | {hs['solve_rate']} | {ls['solve_rate']} |",
+            f"| Mean reward | {hs['mean_reward']} | {ls['mean_reward']} |",
+            f"| Mean turns | {hs['mean_turns']} | {ls['mean_turns']} |",
+            f"| Mean survey | {hs['mean_survey']} | {ls['mean_survey']} |",
+            "\n> Gaps here reveal whether the LLM persona is too easy or too agreeable.",
+        ]
+    else:
+        lines.append("*(Need both human and automated sessions for this comparison.)*")
+
+    lines += [
+        "\n---",
+        "## 5. RL Interpretation\n",
+        "**M2 (GRPO):** High-reward skill sequences above = preferred demonstrations. "
+        "Low-reward sequences = negative examples for reward-guided selection.\n",
+        "**M5 (Compositional):** Adjacent skills that co-occur in high-reward sequences "
+        "are candidates for synthesis into composite higher-level skills.\n",
+        "**M6 (Single agent):** Skills cluster into Tutor/Teacher/Educator/Mentor roles. "
+        "This analysis shows which role clusters drive success.\n",
+        "---\n*Generated by analyse_results.py*",
+    ]
+
+    report = "\n".join(lines)
+    out = RESULTS_DIR / "analysis_report.md"
+    out.write_text(report, encoding="utf-8")
+    print(f"\n[saved] {out}")
+    print(report[:1200])
+    db.close()
+
+
+def _reward(db, session_id):
+    r = db.get_reward(session_id)
+    return r["total_reward"] if r else 0.0
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--scenario", default=None)
+    args = parser.parse_args()
+    run(args.scenario)

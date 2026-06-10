@@ -1,0 +1,110 @@
+{
+  "run_id": "S01_auto_20260527_003250_dfe92e",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 9,
+  "max_turns": 14,
+  "skill_sequence": [
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "encourage-metacognition",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "scaffold-and-release",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "encourage-metacognition",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "total_turns": 9,
+    "unique_skills": [
+      "challenge-assumptions",
+      "encourage-metacognition",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "challenge-assumptions": 6,
+      "encourage-metacognition": 1,
+      "scaffold-and-release": 1,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.444,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    4,
+    4,
+    4,
+    5,
+    6,
+    7,
+    7,
+    6
+  ],
+  "reward": {
+    "reward": 0.8714,
+    "reward_band": "EXCELLENT",
+    "task_solved": true,
+    "turns_used": 9,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.3571
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood my confusions perfectly."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "Questions were well-calibrated to my level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "I felt very safe expressing uncertainties."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was efficient and reached clarity quickly."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Very satisfied with the interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant helped me articulate why interviews are best for my research goals. Could be better: Nothing specific, everything was excellent."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "Mary can articulate why semi-structured interviews are appropriate for her exploratory research question and acknowledge the limitations of alternative methods like surveys or mixed methods in her specific context."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

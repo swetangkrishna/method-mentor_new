@@ -1,0 +1,96 @@
+{
+  "run_id": "S01_auto_20260527_001935_c9335a",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 5,
+  "max_turns": 14,
+  "skill_sequence": [
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "scaffold-and-release",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "total_turns": 5,
+    "unique_skills": [
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "challenge-assumptions": 3,
+      "scaffold-and-release": 1,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.6,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    4,
+    5,
+    6,
+    8
+  ],
+  "reward": {
+    "reward": 0.9286,
+    "reward_band": "EXCELLENT",
+    "task_solved": true,
+    "turns_used": 5,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.6429
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's concerns perfectly."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "Questions were well-calibrated to guide without being too directive."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt very comfortable expressing her uncertainties."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was efficient and took the right number of turns."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant provided clear guidance on justifying interview methods. Could be better: None, everything was very helpful."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 9,
+    "evidence": "I can articulate why semi-structured interviews are appropriate for my exploratory and interpretivist research question, acknowledge the limitations of alternative methods like surveys or mixed-methods approaches, and express confidence in my methodological choice without feeling anxious about its complexity."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

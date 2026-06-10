@@ -1,0 +1,122 @@
+{
+  "run_id": "S01_auto_20260526_232401_c502f1",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 14,
+  "max_turns": 14,
+  "skill_sequence": [
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "challenge-assumptions",
+      "probe-intended-decisions"
+    ],
+    "skill_counts": {
+      "challenge-assumptions": 2,
+      "probe-intended-decisions": 12
+    },
+    "diversity_ratio": 0.143,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    2,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "reward": {
+    "reward": 0.8,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 14,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.0
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The supervisor clearly understood my concerns about the rigor of semi-structured interviews."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The questions and guidance were perfectly calibrated to my level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "I felt completely safe expressing uncertainty without any embarrassment."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was very efficient, taking the right number of turns to reach clarity."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, I am very satisfied with this supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "The most helpful thing was having a clear and structured justification for my research method. It could have been better if the session started with a bit more context about my specific research question."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 10,
+    "evidence": "I have articulated a clear and robust justification for using semi-structured interviews as my research method, addressing the exploratory nature of my question, the richness of data collection, and the systematic analysis through thematic coding. I feel confident in this choice."
+  },
+  "model": "qwen2.5:7b-instruct",
+  "backend": "ollama"
+}

@@ -1,0 +1,152 @@
+{
+  "run_id": "S02_auto_20260610_101326_d632b7",
+  "scenario_id": "S02",
+  "topic": "Research methods for parents' experiences of school transition",
+  "student": "John",
+  "mode": "automated",
+  "task_solved": false,
+  "total_turns": 14,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "provide-emotional-support",
+    "provide-emotional-support",
+    "provide-emotional-support",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "provide-emotional-support",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "provide-emotional-support",
+      "provide-emotional-support",
+      "provide-emotional-support",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "provide-emotional-support",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "provide-emotional-support"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 10,
+      "provide-emotional-support": 4
+    },
+    "diversity_ratio": 0.143,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    2,
+    3,
+    3,
+    3,
+    4,
+    4,
+    4,
+    5,
+    5,
+    6,
+    4,
+    5,
+    4,
+    5
+  ],
+  "stage_progression": {
+    "final_stage": 1,
+    "stage_history": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "completed_stages": [
+      1
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "user_requested_exit": false,
+    "max_stage_reached": 1
+  },
+  "reward": {
+    "reward": 0.344,
+    "reward_band": "POOR",
+    "task_solved": false,
+    "turns_used": 14,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 0.5,
+      "survey_score_raw_mean": 3.4,
+      "survey_score_normalised": 0.6,
+      "efficiency_score": 0.0
+    },
+    "base_reward": 0.43,
+    "stage_progress_score": 0.0,
+    "max_stage_reached": 1,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 4,
+      "comment": "The assistant understood John's confusion about research methods but could have probed more deeply into his specific uncertainties."
+    },
+    "Q2": {
+      "score": 3,
+      "comment": "Questions were generally appropriate but sometimes felt a bit repetitive and not sufficiently tailored to John's unique situation."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "John felt very comfortable expressing his doubts and receiving guidance without feeling judged."
+    },
+    "Q4": {
+      "score": 2,
+      "comment": "The conversation took too many turns to reach clarity on the research methods; it could have been more direct."
+    },
+    "Q5": {
+      "score": 3,
+      "comment": "Overall, John felt moderately satisfied with the session but wished for clearer guidance on next steps."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful was providing a sense of direction and breaking down tasks into manageable parts. Could have been better if it had more concrete examples of how to apply research methods."
+    }
+  },
+  "task_check": {
+    "solved": false,
+    "confidence": 7,
+    "evidence": "John has identified key areas of interest but needs to specify which ones are most important for his research."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

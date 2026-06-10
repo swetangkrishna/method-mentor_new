@@ -1,0 +1,125 @@
+{
+  "run_id": "S01_auto_20260527_000814_7f4e90",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 14,
+  "max_turns": 14,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "scaffold-and-release",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 5,
+      "challenge-assumptions": 4,
+      "scaffold-and-release": 4,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.286,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    5,
+    4,
+    5,
+    4,
+    5,
+    4,
+    5,
+    5,
+    6,
+    7,
+    7,
+    7,
+    8
+  ],
+  "reward": {
+    "reward": 0.77,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 14,
+    "max_turns": 14,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.6,
+      "survey_score_normalised": 0.9,
+      "efficiency_score": 0.0
+    }
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's concerns very well."
+    },
+    "Q2": {
+      "score": 4,
+      "comment": "Questions were generally appropriate but could be more directly aligned with Mary's specific doubts."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt comfortable expressing her uncertainties and receiving guidance."
+    },
+    "Q4": {
+      "score": 4,
+      "comment": "The conversation was efficient but could have been slightly shorter to maintain focus."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, Mary is very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant helped clarify why interviews are suitable for her research. Could be better: More direct questions to address specific concerns earlier."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "I can articulate why semi-structured interviews are suitable for exploring teachers' perceptions of digital tools in geography and address potential critiques about reliability and validity."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}
