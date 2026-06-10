@@ -147,6 +147,32 @@ def _parse_raw(raw: str, prev_level: Optional[int]) -> Dict:
     }
 
 
+# Stage-appropriate, student-voiced sentence openers used to force the model to
+# continue mid-sentence as the student during empty-body recovery. None of these
+# are mentor-voiced; each commits the turn to the student's perspective. Lower
+# understanding leans toward uncertainty; higher leans toward tentative clarity.
+_OPENERS_LOW = {   # understanding <= 4
+    1: "Honestly, I'm still not totally sure — ",
+    2: "I think ",
+    3: "I'm not certain, but ",
+    4: "I hadn't really considered that — ",
+    5: "Thinking about it for my own situation, ",
+    6: "If I had to pick, I'd say ",
+}
+_OPENERS_HIGH = {  # understanding >= 5
+    1: "Okay, so ",
+    2: "For my background, ",
+    3: "I think the aim is ",
+    4: "That's interesting — I can see how ",
+    5: "Weighing that up for my project, ",
+    6: "Looking back over everything, I think ",
+}
+
+def _student_voice_opener(current_stage: int, level: int) -> str:
+    table = _OPENERS_HIGH if level >= 5 else _OPENERS_LOW
+    return table.get(current_stage, "I think ")
+
+
 def persona_respond(
     scenario: Dict,
     history: List[Dict],
@@ -165,33 +191,51 @@ def persona_respond(
     )
     result = _parse_raw(raw, prev_level)
 
-    # Empty-body fallback: minimal no-format call.
+    # Empty-body recovery: the model emitted the headers then stopped. Do NOT
+    # switch to a separate minimal prompt — that caused role-swapping (the model
+    # started a fresh turn and drifted into mentor voice). Instead, retry the
+    # SAME stage-aware persona prompt but extend the prefill so the model is
+    # forced to continue MID-SENTENCE in the student's own voice. It cannot stop
+    # (a sentence is already open) and cannot role-swap (the sentence has already
+    # begun as the student speaking).
     if not result["response"]:
-        print(f"  [persona] ⚠ Empty body (understanding={result['understanding_level']}/10) "
-              f"— using minimal fallback call")
-        fallback_system = (
-            f"You are {p['name']}, a {p['level']}.\n"
-            f"React to what your mentor just said in 2-3 sentences.\n"
-            f"Use a natural student voice. No headers, no bullet points, "
-            f"no questions back to the mentor. Just your honest reaction."
+        level = result["understanding_level"]
+        print(f"  [persona] ⚠ Empty body (understanding={level}/10) "
+              f"— retrying with in-character prefill")
+
+        opener = _student_voice_opener(current_stage, level)
+        # Prefill includes the two metadata lines (already-known level) plus the
+        # start of a student sentence. The model continues from `opener`.
+        recovery_prefill = (
+            f"UNDERSTANDING_LEVEL: {level}\n"
+            f"LEARNER_READY: NO\n"
+            f"{opener}"
         )
-        fallback_raw = call_llm(
+        recovery_raw = call_llm(
             messages=history,
-            system=fallback_system,
-            max_tokens=120,
-            temperature=0.85,
+            system=_system(scenario, current_stage, prev_level),
+            max_tokens=200,
+            temperature=0.75,
             role="persona",
-            prefill="I ",
+            prefill=recovery_prefill,
         )
-        fallback_body = _sanitize(fallback_raw).strip()
-        fallback_body = "\n".join(
-            ln for ln in fallback_body.splitlines()
-            if not ln.strip().upper().startswith(("UNDERSTANDING_LEVEL:", "LEARNER_READY:"))
-        ).strip()
-        if fallback_body:
-            result["response"] = fallback_body
+        recovered = _parse_raw(recovery_raw, prev_level)
+        # Keep the (reliable) level from the first call; take the recovered body.
+        if recovered["response"]:
+            result["response"] = recovered["response"]
+            result["understanding_level"] = level
         else:
-            print(f"  [persona] ⚠ Fallback also empty — leaving blank")
+            # Last resort: use the opener itself plus whatever followed it, so we
+            # never store an empty student turn (which corrupts later context).
+            salvaged = _sanitize(recovery_raw)
+            salvaged = "\n".join(
+                ln for ln in salvaged.splitlines()
+                if not ln.strip().upper().startswith(
+                    ("UNDERSTANDING_LEVEL:", "LEARNER_READY:"))
+            ).strip()
+            result["response"] = salvaged or opener.strip()
+            result["understanding_level"] = level
+            print(f"  [persona] ⚠ Recovery thin — salvaged opener-based response")
 
     return result
 

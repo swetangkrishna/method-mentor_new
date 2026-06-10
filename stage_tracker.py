@@ -41,12 +41,21 @@ _EXIT_PATTERNS = [
 
 
 class StageTracker:
+    # After this many consecutive turns on the same stage, the tracker emits a
+    # hard "advance now" directive (mirrors the agent's skill-ban mechanism).
+    STALL_THRESHOLD = 3
+    # Stage 5 (reflective comparison) legitimately spans several turns — one per
+    # method — so it gets a higher stall threshold before being pushed forward.
+    STALL_THRESHOLD_STAGE5 = 5
+
     def __init__(self) -> None:
         self.current_stage: int = FIRST_STAGE
         self.stage_history: List[int] = []          # one entry per agent turn
         self.completed_stages: set = set()
         self.corrections: int = 0                    # illegal-transition count
         self.user_requested_exit: bool = False
+        self.turns_on_current_stage: int = 0         # consecutive-turn counter
+        self.forced_advances: int = 0                # how many times we pushed forward
 
     # ── Transition validation ─────────────────────────────────────────────────
 
@@ -89,8 +98,26 @@ class StageTracker:
         Record one agent turn. `declared` is the STAGE: header the agent emitted.
         `stage_satisfied` indicates the agent marked the current stage complete
         (via STAGE_COMPLETE: YES). Returns the stage now in effect.
+
+        Enforcement: if a stall directive was in effect for THIS turn (the agent
+        was shown 'ADVANCE REQUIRED') and the agent nonetheless failed to move
+        forward, the tracker forces the advance to the next stage. This guarantees
+        progression even when the model ignores the directive, while leaving a
+        compliant agent's natural advancement untouched.
         """
+        # Was the agent under an advance directive coming into this turn?
+        directive_was_active = self.is_stalled()
+
         target = self.legal_next(declared)
+
+        # Hard enforcement: directive fired but the agent did not move forward.
+        if directive_was_active and target <= self.current_stage:
+            forced = self.next_target_stage()
+            if forced > self.current_stage:
+                target = forced
+                self.forced_advances += 1
+                # A forced advance implies the prior stage is treated as complete.
+                self.completed_stages.add(self.current_stage)
 
         # If the agent moved forward, every stage strictly before the new target
         # is considered complete (it either gathered or skipped that info).
@@ -103,9 +130,36 @@ class StageTracker:
         if target == self.current_stage and stage_satisfied:
             self.completed_stages.add(self.current_stage)
 
+        # Maintain the consecutive-turn counter for the stall directive.
+        if target == self.current_stage:
+            self.turns_on_current_stage += 1
+        else:
+            self.turns_on_current_stage = 1   # first turn on the new stage
+
         self.current_stage = target
         self.stage_history.append(target)
         return target
+
+    def _stall_threshold(self) -> int:
+        """Stage 5 gets a longer leash (multi-method reflection)."""
+        from stages import FINAL_STAGE as _F  # local import to avoid cycle risk
+        if self.current_stage == 5:
+            return self.STALL_THRESHOLD_STAGE5
+        return self.STALL_THRESHOLD
+
+    def is_stalled(self) -> bool:
+        """
+        True when the agent has spent too many consecutive turns on the current
+        stage and forward progress is both possible and warranted. Never fires
+        on the final stage (there is nowhere to advance to).
+        """
+        if self.current_stage >= FINAL_STAGE:
+            return False
+        return self.turns_on_current_stage >= self._stall_threshold()
+
+    def next_target_stage(self) -> int:
+        """The stage the agent should advance to when stalled."""
+        return min(self.current_stage + 1, FINAL_STAGE)
 
     def mark_final_reached(self) -> bool:
         return self.current_stage >= FINAL_STAGE
@@ -151,6 +205,21 @@ class StageTracker:
 
         # Detail for the current stage.
         lines.append(f"### YOU ARE IN STAGE {cur['number']}: {cur['name']}")
+
+        # ── Hard stall directive (Fix 2) ──────────────────────────────────────
+        # If the agent has lingered on this stage too long, force it forward.
+        if self.is_stalled():
+            nxt = self.next_target_stage()
+            nxt_name = STAGES[nxt]["name"]
+            lines.append(
+                f"## ⚠ ADVANCE REQUIRED THIS TURN\n"
+                f"You have spent {self.turns_on_current_stage} consecutive turns in "
+                f"Stage {cur['number']} ({cur['name']}). The student has already "
+                f"provided what this stage needs. Staying here is an error. This "
+                f"turn you MUST set STAGE: {nxt} and begin Stage {nxt} "
+                f"({nxt_name}). Set STAGE_COMPLETE for Stage {cur['number']} to YES.\n"
+            )
+
         lines.append(f"What to do now: {cur['action']}")
         lines.append(f"Why: {cur['purpose']}")
         lines.append(f"This stage is complete when: {cur['completion_criteria']}")
@@ -196,6 +265,7 @@ class StageTracker:
             "completed_stages": sorted(self.completed_stages),
             "reached_final": self.mark_final_reached(),
             "stage_corrections": self.corrections,
+            "forced_advances": self.forced_advances,
             "user_requested_exit": self.user_requested_exit,
             "max_stage_reached": max(self.stage_history) if self.stage_history else FIRST_STAGE,
         }
