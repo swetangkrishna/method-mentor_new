@@ -1,0 +1,166 @@
+{
+  "run_id": "S01_auto_20260610_141156_4e5823",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 16,
+  "max_turns": 16,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 16,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 9,
+      "challenge-assumptions": 1,
+      "confirm-competence": 6
+    },
+    "diversity_ratio": 0.188,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    3,
+    3,
+    3,
+    4,
+    4,
+    4,
+    5,
+    6,
+    6,
+    6,
+    7,
+    6,
+    7,
+    7,
+    8,
+    8
+  ],
+  "stage_progression": {
+    "final_stage": 5,
+    "stage_history": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5
+    ],
+    "completed_stages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "forced_advances": 2,
+    "user_requested_exit": false,
+    "max_stage_reached": 5
+  },
+  "reward": {
+    "reward": 0.8,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 16,
+    "max_turns": 16,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.0
+    },
+    "base_reward": 0.8,
+    "stage_progress_score": 0.8,
+    "max_stage_reached": 5,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The supervisor understood my concerns very well."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The questions were perfectly calibrated to my level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "I felt completely safe expressing my uncertainties."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was very efficient and reached clarity in a good number of turns."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, I am very satisfied with this supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The supervisor helped me articulate why semi-structured interviews are the best fit for my research. Could be better: Nothing specific; everything was excellent."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "Mary has articulated why semi-structured interviews are appropriate for her research question and acknowledged the limitations of alternative methods like surveys, observation, and mixed methods."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

@@ -33,7 +33,7 @@ import os
 # ═══════════════════════════════════════════════════════
 #  CHANGE THIS ONE LINE TO SWITCH BACKEND
 # ═══════════════════════════════════════════════════════
-BACKEND = "ollama"   # "ollama" | "vllm" | "huggingface" | "anthropic"
+BACKEND = "vllm"   # "vllm" | "ollama" | "huggingface" | "anthropic"
 
 # ── vLLM (cluster: A100-80GB, OpenAI-compatible server) ──────────────────────
 # On the cluster the model weights live under /home/support/llm/. We serve them
@@ -70,7 +70,7 @@ HF_RETRY_DELAY = 25          # seconds to wait on cold start
 # Apple Silicon presets:
 #   96 GB → qwen2.5:72b    64 GB → qwen2.5:72b
 #   32 GB → qwen2.5:32b    16 GB → qwen2.5:14b    8 GB → llama3.1:8b
-OLLAMA_MODEL    = "qwen2.5:14b"
+OLLAMA_MODEL    = "qwen2.5:32b"
 OLLAMA_HOST     = "http://localhost:11434"
 OLLAMA_CTX      = 8192
 OLLAMA_TIMEOUT  = 180

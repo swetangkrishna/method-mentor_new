@@ -1,0 +1,167 @@
+{
+  "run_id": "S01_auto_20260610_143211_46fe7f",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 16,
+  "max_turns": 16,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 16,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 9,
+      "challenge-assumptions": 4,
+      "confirm-competence": 3
+    },
+    "diversity_ratio": 0.188,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    3,
+    3,
+    3,
+    3,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    7,
+    6,
+    7,
+    8,
+    8,
+    8
+  ],
+  "stage_progression": {
+    "final_stage": 5,
+    "stage_history": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5
+    ],
+    "completed_stages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "forced_advances": 3,
+    "user_requested_exit": false,
+    "max_stage_reached": 5
+  },
+  "reward": {
+    "reward": 0.776,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 16,
+    "max_turns": 16,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.6,
+      "survey_score_normalised": 0.9,
+      "efficiency_score": 0.0
+    },
+    "base_reward": 0.77,
+    "stage_progress_score": 0.8,
+    "max_stage_reached": 5,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's concerns about her research method thoroughly."
+    },
+    "Q2": {
+      "score": 4,
+      "comment": "Questions were generally well-calibrated but occasionally repetitive."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt very comfortable expressing doubts and uncertainties."
+    },
+    "Q4": {
+      "score": 4,
+      "comment": "The conversation was efficient overall but could have been more concise."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: guiding Mary to recognize the value of depth over breadth. Could be better: avoiding repetition and focusing on new insights."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 9,
+    "evidence": "Mary has articulated why semi-structured interviews are appropriate for her research question by explaining that they capture nuanced perspectives crucial to understanding teachers' perceptions of digital tools in geography. She acknowledges the limitations of surveys in providing depth and richness compared to interviews."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

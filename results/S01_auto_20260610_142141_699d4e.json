@@ -1,0 +1,166 @@
+{
+  "run_id": "S01_auto_20260610_142141_699d4e",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 16,
+  "max_turns": 16,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions"
+    ],
+    "total_turns": 16,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 13,
+      "challenge-assumptions": 2,
+      "confirm-competence": 1
+    },
+    "diversity_ratio": 0.188,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    3,
+    3,
+    3,
+    4,
+    4,
+    5,
+    5,
+    5,
+    6,
+    7,
+    6,
+    6,
+    7,
+    8,
+    8,
+    9
+  ],
+  "stage_progression": {
+    "final_stage": 5,
+    "stage_history": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5
+    ],
+    "completed_stages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "forced_advances": 2,
+    "user_requested_exit": false,
+    "max_stage_reached": 5
+  },
+  "reward": {
+    "reward": 0.8,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 16,
+    "max_turns": 16,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.0
+    },
+    "base_reward": 0.8,
+    "stage_progress_score": 0.8,
+    "max_stage_reached": 5,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's uncertainties well."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "Questions were appropriately calibrated to guide without being too directive."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt comfortable expressing her doubts and seeking clarification."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was efficient and reached clarity in a reasonable number of turns."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, Mary is very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant helped clarify why semi-structured interviews are suitable for her research question. Could be better: More time could have been spent on justifying the sample size of 10 interviews."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "Mary can articulate why semi-structured interviews are appropriate for her research question and acknowledge the limitations of alternative methods like surveys and observation. She is confident in justifying her methodological choice without feeling anxious about its complexity."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

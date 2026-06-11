@@ -1,0 +1,175 @@
+{
+  "run_id": "S01_auto_20260611_130759_7eee33",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 16,
+  "max_turns": 16,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "scaffold-and-release",
+    "confirm-competence",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 16,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "scaffold-and-release",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 8,
+      "challenge-assumptions": 4,
+      "scaffold-and-release": 1,
+      "confirm-competence": 3
+    },
+    "diversity_ratio": 0.25,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    2,
+    3,
+    3,
+    3,
+    3,
+    4,
+    5,
+    5,
+    6,
+    4,
+    5,
+    6,
+    7,
+    7,
+    8,
+    8
+  ],
+  "stage_progression": {
+    "final_stage": 5,
+    "stage_history": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5
+    ],
+    "completed_stages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "forced_advances": 2,
+    "stage4_alternatives_presented": true,
+    "stage4_methods_seen": [
+      "Classroom observation",
+      "Mixed methods (survey + follow-up interviews)",
+      "Online survey of teachers"
+    ],
+    "user_requested_exit": false,
+    "max_stage_reached": 5
+  },
+  "reward": {
+    "reward": 0.776,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 16,
+    "max_turns": 16,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 4.6,
+      "survey_score_normalised": 0.9,
+      "efficiency_score": 0.0
+    },
+    "base_reward": 0.77,
+    "stage_progress_score": 0.8,
+    "max_stage_reached": 5,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The assistant understood Mary's uncertainties well."
+    },
+    "Q2": {
+      "score": 4,
+      "comment": "Questions were generally appropriate but could be more direct at times."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt comfortable expressing her doubts and seeking clarification."
+    },
+    "Q4": {
+      "score": 4,
+      "comment": "The conversation was efficient but took a few turns to reach clarity."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Overall, Mary is very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful: The assistant helped clarify why semi-structured interviews are suitable for her research. Could be better: More direct guidance on addressing concerns about methodological rigor."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 9,
+    "evidence": "Mary has articulated why semi-structured interviews are appropriate for her research question and acknowledged the limitations of alternative methods like surveys or mixed approaches. She expresses confidence in her methodological choice without feeling anxious about its complexity."
+  },
+  "model": "qwen2.5:14b",
+  "backend": "ollama"
+}

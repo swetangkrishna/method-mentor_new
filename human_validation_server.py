@@ -26,6 +26,8 @@ from agent import agent_turn
 from reward import calculate_reward, skill_sequence_stats, _band
 from database import Database
 from model_config import get_config
+from stage_tracker import StageTracker
+from stages import FINAL_STAGE, stage_name
 
 app    = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET", "pedagogy-rl-2025")
@@ -479,16 +481,40 @@ def api_start():
         persona_name  = sc["learner_persona"]["name"],
     )
 
-    # Agent goes first
+    # Agent goes first — now stage-aware
     history: list     = []
     skill_seq: list   = []
-    ar = agent_turn(SKILLS, sc, history, [], 1)
+    tracker = StageTracker()
+    comfort_zone = sc.get("stage_profile", {}).get("comfort_zone")
+    stage4_alts  = sc.get("stage_profile", {}).get("stage4_alternatives")
+
+    stage_context  = tracker.build_stage_context(
+        comfort_zone=comfort_zone, stage4_alternatives=stage4_alts)
+    expected_stage = tracker.expected_stage()
+    stage_before   = tracker.current_stage
+
+    ar = agent_turn(SKILLS, sc, history, [], 1,
+                    stage_context=stage_context, expected_stage=expected_stage)
     history.append({"role": "assistant", "content": ar["response"]})
     skill_seq.append(ar["skill_name"])
+
+    stage_now = tracker.advance(
+        ar["declared_stage"], ar["stage_complete"],
+        response_text=ar["response"], stage4_alternatives=stage4_alts)
 
     t_id = DB.log_turn(session_id, 1, "agent", ar["response"],
                        agent_declared_solved=ar["task_solved"])
     DB.log_skill_use(session_id, t_id, 1, ar["skill_name"], ar["reasoning"])
+    try:
+        DB.log_stage(session_id, t_id, 1, stage_now,
+                     declared=ar["declared_stage"], expected=expected_stage,
+                     stage_before=stage_before, stage_complete=ar["stage_complete"],
+                     advanced=(stage_now > stage_before), forced=False,
+                     header_dropped=ar.get("stage_header_dropped", False),
+                     skill=ar["skill_name"], reasoning=ar["reasoning"],
+                     stage4_presented=tracker.stage4_alternatives_presented)
+    except Exception:
+        pass
 
     SESSIONS[session_id] = {
         "session_id":  session_id,
@@ -498,6 +524,9 @@ def api_start():
         "turn_count":  1,
         "task_solved": False,
         "ended":       False,
+        "tracker":     tracker,
+        "comfort_zone": comfort_zone,
+        "stage4_alts": stage4_alts,
     }
 
     return jsonify({
@@ -505,6 +534,9 @@ def api_start():
         "agent_message": ar["response"],
         "skill_used":   ar["skill_name"],
         "turn_count":   1,
+        "stage":        stage_now,
+        "stage_name":   stage_name(stage_now),
+        "final_stage":  FINAL_STAGE,
     })
 
 
@@ -529,13 +561,34 @@ def api_message():
                         "skill_used": None, "turn_count": sess["turn_count"],
                         "max_turns_reached": True})
 
-    ar = agent_turn(SKILLS, sc, history, sess["skill_seq"], sess["turn_count"])
+    ar = agent_turn(SKILLS, sc, history, sess["skill_seq"], sess["turn_count"],
+                    stage_context=tracker.build_stage_context(
+                        comfort_zone=sess["comfort_zone"],
+                        stage4_alternatives=sess["stage4_alts"]),
+                    expected_stage=tracker.expected_stage())
     history.append({"role": "assistant", "content": ar["response"]})
     sess["skill_seq"].append(ar["skill_name"])
+
+    forced_before = tracker.forced_advances
+    stage_before  = tracker.current_stage
+    stage_now = tracker.advance(
+        ar["declared_stage"], ar["stage_complete"],
+        response_text=ar["response"], stage4_alternatives=sess["stage4_alts"])
+    was_forced = tracker.forced_advances > forced_before
 
     t_id = DB.log_turn(session_id, sess["turn_count"], "agent", ar["response"],
                        agent_declared_solved=ar["task_solved"])
     DB.log_skill_use(session_id, t_id, sess["turn_count"], ar["skill_name"], ar["reasoning"])
+    try:
+        DB.log_stage(session_id, t_id, sess["turn_count"], stage_now,
+                     declared=ar["declared_stage"], expected=tracker.current_stage,
+                     stage_before=stage_before, stage_complete=ar["stage_complete"],
+                     advanced=(stage_now > stage_before), forced=was_forced,
+                     header_dropped=ar.get("stage_header_dropped", False),
+                     skill=ar["skill_name"], reasoning=ar["reasoning"],
+                     stage4_presented=tracker.stage4_alternatives_presented)
+    except Exception:
+        pass
 
     if ar["task_solved"]:
         sess["task_solved"] = True
@@ -546,6 +599,10 @@ def api_message():
         "turn_count":           sess["turn_count"],
         "max_turns_reached":    sess["turn_count"] >= sc["max_turns"],
         "agent_declared_solved": ar["task_solved"],
+        "stage":                stage_now,
+        "stage_name":           stage_name(stage_now),
+        "final_stage":          FINAL_STAGE,
+        "stage_forced":         was_forced,
     })
 
 
