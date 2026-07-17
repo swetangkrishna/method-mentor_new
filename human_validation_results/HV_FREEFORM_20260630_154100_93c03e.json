@@ -1,0 +1,30 @@
+{
+  "session_id": "HV_FREEFORM_20260630_154100_93c03e",
+  "scenario_id": "FREEFORM",
+  "topic": "the student's own research project (to be elicited in conversation)",
+  "mode": "human_validation_cli",
+  "freeform": true,
+  "student_name": "user_name",
+  "backend": "vllm",
+  "model": "/home/support/llm/Qwen2.5-14B-Instruct",
+  "max_turns": 30,
+  "started_utc": "2026-06-30T15:41:00",
+  "transcript": [
+    {
+      "turn": 1,
+      "actor": "agent",
+      "skill": "probe-intended-decisions",
+      "stage": 1,
+      "stage_name": "Initial prompt",
+      "reasoning": "Opening the conversation — Stage 1 needs the student's question and tentative method.",
+      "text": "Hi there! Could you tell me about your research project?",
+      "rag_fired": false,
+      "rag_chunks": []
+    }
+  ],
+  "skill_sequence": [
+    "probe-intended-decisions"
+  ],
+  "task_solved": false,
+  "completed": false
+}

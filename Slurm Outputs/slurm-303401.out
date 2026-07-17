@@ -1,0 +1,28 @@
+[job] node: g129
+[job] CUDA_VISIBLE_DEVICES=0
+[job] model: /home/support/llm/Qwen2.5-14B-Instruct
+Tue Jun 16 10:01:59 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 555.42.06              Driver Version: 555.42.06      CUDA Version: 12.5     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:CA:00.0 Off |                    0 |
+| N/A   34C    P0             60W /  400W |       1MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+[job] starting vLLM server on port 8000...
+[job] vLLM server PID: 3433149
+[job] waiting for vLLM /v1/models to respond...
+[job][ERROR] vLLM process died during startup. See vllm_server_303401.log
+[job] shutting down vLLM server (PID 3433149)...

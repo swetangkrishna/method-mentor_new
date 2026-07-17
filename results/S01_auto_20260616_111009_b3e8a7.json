@@ -1,0 +1,165 @@
+{
+  "run_id": "S01_auto_20260616_111009_b3e8a7",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 14,
+  "max_turns": 16,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "challenge-assumptions",
+    "confirm-competence",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "challenge-assumptions",
+      "confirm-competence",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 14,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "challenge-assumptions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 8,
+      "challenge-assumptions": 3,
+      "confirm-competence": 3
+    },
+    "diversity_ratio": 0.214,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    2,
+    3,
+    3,
+    3,
+    4,
+    4,
+    5,
+    6,
+    7,
+    6,
+    7,
+    8,
+    9,
+    9
+  ],
+  "stage_progression": {
+    "final_stage": 5,
+    "stage_history": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5,
+      5
+    ],
+    "completed_stages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "forced_advances": 0,
+    "stage4_alternatives_presented": true,
+    "stage4_methods_seen": [
+      "Classroom observation",
+      "Mixed methods (survey + follow-up interviews)",
+      "Online survey of teachers"
+    ],
+    "user_requested_exit": false,
+    "max_stage_reached": 5
+  },
+  "reward": {
+    "reward": 0.82,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 14,
+    "max_turns": 16,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.125
+    },
+    "base_reward": 0.825,
+    "stage_progress_score": 0.8,
+    "max_stage_reached": 5,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The supervisor understood my confusion and uncertainties completely."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The questions and guidance were perfectly calibrated for my level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "I felt completely safe to express my uncertainties without embarrassment."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was very efficient and took the right number of turns to reach clarity."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "I am very satisfied with this supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "The most helpful thing was the clear guidance on aligning my research methods with my research question. The session could have been better if it had included more time for me to practice justifying my methodological choices."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "Mary can articulate why semi-structured interviews are appropriate for her research question, acknowledges the limitations of surveys and observations, and expresses confidence in her methodological choice without feeling the need for a more complex design."
+  },
+  "model": "/home/support/llm/Qwen2.5-14B-Instruct",
+  "backend": "vllm"
+}

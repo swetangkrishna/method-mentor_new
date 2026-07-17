@@ -1,0 +1,33 @@
+[job] node: g128
+[job] CUDA_VISIBLE_DEVICES=0
+[job] model: /home/support/llm/Qwen2.5-14B-Instruct
+[job] python: /home/skrishna/miniconda3/envs/prac/bin/python
+Thu Jun 18 12:10:03 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 555.42.06              Driver Version: 555.42.06      CUDA Version: 12.5     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:9E:00.0 Off |                    0 |
+| N/A   27C    P0             60W /  400W |       1MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+[job] selected free port: 46893
+[job] VLLM_HOST: http://localhost:46893
+[job] starting vLLM server on port 46893...
+[job] vLLM server PID: 34624
+[job] waiting for vLLM /v1/models to respond...
+[job] vLLM server is healthy after 60s.
+[job] running experiment: scenario=S01 runs=5
+[job] experiment finished with status 0. Log: output_S01_stages_included.log
+[job] shutting down vLLM server (PID 34624)...

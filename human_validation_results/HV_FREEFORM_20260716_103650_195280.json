@@ -1,0 +1,90 @@
+{
+  "session_id": "HV_FREEFORM_20260716_103650_195280",
+  "scenario_id": "FREEFORM",
+  "topic": "the student's own research project (to be elicited in conversation)",
+  "mode": "human_validation_cli",
+  "freeform": true,
+  "student_name": "test_user",
+  "backend": "vllm",
+  "model": "qwen",
+  "max_turns": 40,
+  "started_utc": "2026-07-16T10:36:50",
+  "transcript": [
+    {
+      "turn": 1,
+      "actor": "agent",
+      "skill": "probe-intended-decisions",
+      "stage": 1,
+      "stage_name": "Initial prompt",
+      "reasoning": "",
+      "text": "Choose the one that best fits the student's request and the current stage.",
+      "rag_fired": false,
+      "rag_chunks": []
+    },
+    {
+      "turn": 1,
+      "actor": "human_student",
+      "stage": 1,
+      "text": "hey"
+    },
+    {
+      "turn": 2,
+      "actor": "agent",
+      "skill": "probe-intended-decisions",
+      "stage": 1,
+      "stage_name": "Initial prompt",
+      "reasoning": "",
+      "text": "Available Pedagogical Skills:\n  • ask-for-justification\n  • clarify-by-examples\n  • clarify-vagueness\n  • confirm-understanding\n  • explain-theory\n  • justify-theory\n  • probe-intended-decisions\n  • probe-underlying-assumptions\n  • probe-uncertainty\n  • probe-for-experiences\n  • prompt-reflection\n\n## READY TO SELECT YOUR SKILL FOR THIS TURN",
+      "rag_fired": false,
+      "rag_chunks": []
+    },
+    {
+      "turn": 2,
+      "actor": "human_student",
+      "stage": 1,
+      "text": "hey"
+    },
+    {
+      "turn": 3,
+      "actor": "agent",
+      "skill": "probe-intended-decisions",
+      "stage": 1,
+      "stage_name": "Initial prompt",
+      "reasoning": "This skill is crucial here to understand what the student is thinking about their research question and initial method choice.",
+      "text": "I'd like to begin by asking: Could you tell me about your research question and what area of study it's related to, as well as any methods you're currently considering or have worked with in the past?",
+      "rag_fired": false,
+      "rag_chunks": []
+    }
+  ],
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions"
+  ],
+  "task_solved": false,
+  "completed": true,
+  "ended_reason": "survey_completed",
+  "ended_utc": "2026-07-16T10:41:00",
+  "stage_reached": 1,
+  "stage_name": "Initial prompt",
+  "turns": 3,
+  "survey": {},
+  "reward": {
+    "reward": 0.335,
+    "reward_band": "POOR",
+    "task_solved": false,
+    "turns_used": 3,
+    "max_turns": 40,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 0.0,
+      "survey_score_raw_mean": 3.0,
+      "survey_score_normalised": 0.5,
+      "efficiency_score": 0.925
+    }
+  }
+}

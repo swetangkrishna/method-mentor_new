@@ -1,0 +1,137 @@
+{
+  "run_id": "S01_auto_20260616_110701_6f4406",
+  "scenario_id": "S01",
+  "topic": "Research methods for teachers' perceptions of digital tools in geography",
+  "student": "Mary",
+  "mode": "automated",
+  "task_solved": true,
+  "total_turns": 9,
+  "max_turns": 16,
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "probe-intended-decisions",
+    "probe-intended-decisions",
+    "confirm-competence",
+    "confirm-competence"
+  ],
+  "skill_stats": {
+    "sequence": [
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "probe-intended-decisions",
+      "probe-intended-decisions",
+      "confirm-competence",
+      "confirm-competence"
+    ],
+    "total_turns": 9,
+    "unique_skills": [
+      "probe-intended-decisions",
+      "confirm-competence"
+    ],
+    "skill_counts": {
+      "probe-intended-decisions": 6,
+      "confirm-competence": 3
+    },
+    "diversity_ratio": 0.222,
+    "rut_detected": true
+  },
+  "understanding_progression": [
+    3,
+    3,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "stage_progression": {
+    "final_stage": 3,
+    "stage_history": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3
+    ],
+    "completed_stages": [
+      1,
+      2,
+      3
+    ],
+    "reached_final": false,
+    "stage_corrections": 0,
+    "forced_advances": 0,
+    "stage4_alternatives_presented": false,
+    "stage4_methods_seen": [],
+    "user_requested_exit": false,
+    "max_stage_reached": 3
+  },
+  "reward": {
+    "reward": 0.79,
+    "reward_band": "GOOD",
+    "task_solved": true,
+    "turns_used": 9,
+    "max_turns": 16,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 1.0,
+      "survey_score_raw_mean": 5.0,
+      "survey_score_normalised": 1.0,
+      "efficiency_score": 0.4375
+    },
+    "base_reward": 0.8875,
+    "stage_progress_score": 0.4,
+    "max_stage_reached": 3,
+    "reached_final_stage": false
+  },
+  "survey": {
+    "Q1": {
+      "score": 5,
+      "comment": "The supervisor understood Mary's uncertainties and provided clear guidance."
+    },
+    "Q2": {
+      "score": 5,
+      "comment": "The questions and guidance were well-calibrated to Mary's level of understanding."
+    },
+    "Q3": {
+      "score": 5,
+      "comment": "Mary felt very safe to express her uncertainties and confusion."
+    },
+    "Q4": {
+      "score": 5,
+      "comment": "The conversation was efficient and took the right number of turns to reach clarity."
+    },
+    "Q5": {
+      "score": 5,
+      "comment": "Mary is very satisfied with the supervisory interaction."
+    },
+    "Q_open": {
+      "score": null,
+      "comment": "Most helpful was the guidance on aligning research methods with research questions. Could have been better if it included a brief overview of how to design interview questions."
+    }
+  },
+  "task_check": {
+    "solved": true,
+    "confidence": 8,
+    "evidence": "Mary can articulate why semi-structured interviews are appropriate for her research question, acknowledges the trade-offs of surveys and observational studies, and expresses confidence in her methodological choice without feeling anxious about its complexity."
+  },
+  "model": "/home/support/llm/Qwen2.5-14B-Instruct",
+  "backend": "vllm"
+}

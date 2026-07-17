@@ -1,0 +1,11 @@
+[job] node: g130
+[job] CUDA_VISIBLE_DEVICES=0
+[job] model: /home/support/llm/Qwen2.5-14B-Instruct
+[job] python: /home/skrishna/miniconda3/envs/prac/bin/python
+[job] selected free port: 39847
+[job] VLLM_HOST: http://localhost:39847
+[job] starting vLLM server on port 39847...
+[job] vLLM server PID: 3076037  (log: vllm_server_305098.log)
+[job] waiting for vLLM /v1/models to respond (model load ~40-90s)...
+
+[job] shutting down vLLM server (PID 3076037)...

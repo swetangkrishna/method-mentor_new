@@ -248,16 +248,37 @@ class Database:
         survey_data: Dict,
         respondent_type: str = "persona",
     ):
-        """survey_data: {Q1: {score, comment}, ..., Q_open: {score: None, comment}}"""
+        """Persist survey answers.
+
+        Preferred format::
+            {"Q1": {"score": 4, "comment": ""},
+             "Q_open": {"score": None, "comment": "Helpful"}}
+
+        Scalar numeric and string values are accepted for backward compatibility.
+        """
         ts = _now()
         for q_id, data in survey_data.items():
+            if isinstance(data, dict):
+                score = data.get("score")
+                comment = data.get("comment", "")
+            elif isinstance(data, (int, float)) and not isinstance(data, bool):
+                score = data
+                comment = ""
+            elif isinstance(data, str):
+                score = None
+                comment = data
+            elif data is None:
+                score = None
+                comment = ""
+            else:
+                score = None
+                comment = str(data)
+
             self.conn.execute("""
                 INSERT INTO survey_responses
                   (session_id, question_id, score, comment, respondent_type, timestamp)
                 VALUES (?,?,?,?,?,?)
-            """, (session_id, q_id,
-                  data.get("score"), data.get("comment", ""),
-                  respondent_type, ts))
+            """, (session_id, q_id, score, comment, respondent_type, ts))
         self.conn.commit()
 
     def get_survey(self, session_id: str) -> Dict:

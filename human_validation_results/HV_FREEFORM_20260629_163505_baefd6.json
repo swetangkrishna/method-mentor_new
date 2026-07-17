@@ -1,0 +1,72 @@
+{
+  "session_id": "HV_FREEFORM_20260629_163505_baefd6",
+  "scenario_id": "FREEFORM",
+  "topic": "the student's own research project (to be elicited in conversation)",
+  "mode": "human_validation_cli",
+  "freeform": true,
+  "student_name": "user_name",
+  "backend": "vllm",
+  "model": "/home/support/llm/Qwen2.5-14B-Instruct",
+  "max_turns": 30,
+  "started_utc": "2026-06-29T16:35:05",
+  "transcript": [
+    {
+      "turn": 1,
+      "actor": "agent",
+      "skill": "probe-intended-decisions",
+      "stage": 1,
+      "stage_name": "Initial prompt",
+      "reasoning": "Opening the conversation — Stage 1 needs the student's question and tentative method.",
+      "text": "Hi there! Could you tell me about your research project?",
+      "rag_fired": false,
+      "rag_chunks": []
+    },
+    {
+      "turn": 1,
+      "actor": "human_student",
+      "stage": 1,
+      "text": "hi"
+    },
+    {
+      "turn": 2,
+      "actor": "agent",
+      "skill": "probe-intended-decisions",
+      "stage": 1,
+      "stage_name": "Initial prompt",
+      "reasoning": "Starting the conversation by asking about the student's research question and method, as required by Stage 1.",
+      "text": "Hi there! Could you tell me about your research project?",
+      "rag_fired": false,
+      "rag_chunks": []
+    }
+  ],
+  "skill_sequence": [
+    "probe-intended-decisions",
+    "probe-intended-decisions"
+  ],
+  "task_solved": false,
+  "completed": true,
+  "ended_reason": "survey_completed",
+  "ended_utc": "2026-06-29T16:35:47",
+  "stage_reached": 1,
+  "stage_name": "Initial prompt",
+  "turns": 2,
+  "survey": {},
+  "reward": {
+    "reward": 0.3367,
+    "reward_band": "POOR",
+    "task_solved": false,
+    "turns_used": 2,
+    "max_turns": 30,
+    "weights": {
+      "task_solved": 0.5,
+      "survey_score": 0.3,
+      "efficiency": 0.2
+    },
+    "components": {
+      "task_solved_score": 0.0,
+      "survey_score_raw_mean": 3.0,
+      "survey_score_normalised": 0.5,
+      "efficiency_score": 0.9333
+    }
+  }
+}

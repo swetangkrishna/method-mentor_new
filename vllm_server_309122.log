@@ -1,0 +1,90 @@
+INFO 07-09 09:48:16 __init__.py:207] Automatically detected platform cuda.
+INFO 07-09 09:48:16 api_server.py:912] vLLM API server version 0.7.3
+INFO 07-09 09:48:16 api_server.py:913] args: Namespace(host=None, port=38861, uvicorn_log_level='info', allow_credentials=False, allowed_origins=['*'], allowed_methods=['*'], allowed_headers=['*'], api_key=None, lora_modules=None, prompt_adapters=None, chat_template=None, chat_template_content_format='auto', response_role='assistant', ssl_keyfile=None, ssl_certfile=None, ssl_ca_certs=None, ssl_cert_reqs=0, root_path=None, middleware=[], return_tokens_as_token_ids=False, disable_frontend_multiprocessing=False, enable_request_id_headers=False, enable_auto_tool_choice=False, enable_reasoning=False, reasoning_parser=None, tool_call_parser=None, tool_parser_plugin='', model='/home/support/llm/Qwen2.5-14B-Instruct', task='auto', tokenizer=None, skip_tokenizer_init=False, revision=None, code_revision=None, tokenizer_revision=None, tokenizer_mode='auto', trust_remote_code=False, allowed_local_media_path=None, download_dir=None, load_format='auto', config_format=<ConfigFormat.AUTO: 'auto'>, dtype='bfloat16', kv_cache_dtype='auto', max_model_len=8192, guided_decoding_backend='xgrammar', logits_processor_pattern=None, model_impl='auto', distributed_executor_backend=None, pipeline_parallel_size=1, tensor_parallel_size=1, max_parallel_loading_workers=None, ray_workers_use_nsight=False, block_size=None, enable_prefix_caching=None, disable_sliding_window=False, use_v2_block_manager=True, num_lookahead_slots=0, seed=0, swap_space=4, cpu_offload_gb=0, gpu_memory_utilization=0.9, num_gpu_blocks_override=None, max_num_batched_tokens=None, max_num_partial_prefills=1, max_long_partial_prefills=1, long_prefill_token_threshold=0, max_num_seqs=None, max_logprobs=20, disable_log_stats=False, quantization=None, rope_scaling=None, rope_theta=None, hf_overrides=None, enforce_eager=False, max_seq_len_to_capture=8192, disable_custom_all_reduce=False, tokenizer_pool_size=0, tokenizer_pool_type='ray', tokenizer_pool_extra_config=None, limit_mm_per_prompt=None, mm_processor_kwargs=None, disable_mm_preprocessor_cache=False, enable_lora=False, enable_lora_bias=False, max_loras=1, max_lora_rank=16, lora_extra_vocab_size=256, lora_dtype='auto', long_lora_scaling_factors=None, max_cpu_loras=None, fully_sharded_loras=False, enable_prompt_adapter=False, max_prompt_adapters=1, max_prompt_adapter_token=0, device='auto', num_scheduler_steps=1, multi_step_stream_outputs=True, scheduler_delay_factor=0.0, enable_chunked_prefill=None, speculative_model=None, speculative_model_quantization=None, num_speculative_tokens=None, speculative_disable_mqa_scorer=False, speculative_draft_tensor_parallel_size=None, speculative_max_model_len=None, speculative_disable_by_batch_size=None, ngram_prompt_lookup_max=None, ngram_prompt_lookup_min=None, spec_decoding_acceptance_method='rejection_sampler', typical_acceptance_sampler_posterior_threshold=None, typical_acceptance_sampler_posterior_alpha=None, disable_logprobs_during_spec_decoding=None, model_loader_extra_config=None, ignore_patterns=[], preemption_mode=None, served_model_name=['qwen'], qlora_adapter_name_or_path=None, otlp_traces_endpoint=None, collect_detailed_traces=None, disable_async_output_proc=False, scheduling_policy='fcfs', scheduler_cls='vllm.core.scheduler.Scheduler', override_neuron_config=None, override_pooler_config=None, compilation_config=None, kv_transfer_config=None, worker_cls='auto', generation_config=None, override_generation_config=None, enable_sleep_mode=False, calculate_kv_scales=False, additional_config=None, disable_log_requests=False, max_log_len=None, disable_fastapi_docs=False, enable_prompt_tokens_details=False)
+INFO 07-09 09:48:16 api_server.py:209] Started engine process with PID 2135311
+Traceback (most recent call last):
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 991, in <module>
+    uvloop.run(run_server(args))
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
+    return loop.run_until_complete(wrapper())
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
+    return await main
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 947, in run_server
+    async with build_async_engine_client(args) as engine_client:
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 139, in build_async_engine_client
+    async with build_async_engine_client_from_engine_args(
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 220, in build_async_engine_client_from_engine_args
+    engine_config = engine_args.create_engine_config()
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1127, in create_engine_config
+    model_config = self.create_model_config()
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1047, in create_model_config
+    return ModelConfig(
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/config.py", line 304, in __init__
+    hf_config = get_config(self.model, trust_remote_code, revision,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 256, in get_config
+    if is_gguf or file_or_path_exists(
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 168, in file_or_path_exists
+    cached_filepath = try_to_load_from_cache(repo_id=model,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 154, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/support/llm/Qwen2.5-14B-Instruct'. Use `repo_type` argument if needed.
+INFO 07-09 09:48:20 __init__.py:207] Automatically detected platform cuda.
+ERROR 07-09 09:48:20 engine.py:400] Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/support/llm/Qwen2.5-14B-Instruct'. Use `repo_type` argument if needed.
+ERROR 07-09 09:48:20 engine.py:400] Traceback (most recent call last):
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 391, in run_mp_engine
+ERROR 07-09 09:48:20 engine.py:400]     engine = MQLLMEngine.from_engine_args(engine_args=engine_args,
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 119, in from_engine_args
+ERROR 07-09 09:48:20 engine.py:400]     engine_config = engine_args.create_engine_config(usage_context)
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1127, in create_engine_config
+ERROR 07-09 09:48:20 engine.py:400]     model_config = self.create_model_config()
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1047, in create_model_config
+ERROR 07-09 09:48:20 engine.py:400]     return ModelConfig(
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/config.py", line 304, in __init__
+ERROR 07-09 09:48:20 engine.py:400]     hf_config = get_config(self.model, trust_remote_code, revision,
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 256, in get_config
+ERROR 07-09 09:48:20 engine.py:400]     if is_gguf or file_or_path_exists(
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 168, in file_or_path_exists
+ERROR 07-09 09:48:20 engine.py:400]     cached_filepath = try_to_load_from_cache(repo_id=model,
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+ERROR 07-09 09:48:20 engine.py:400]     validate_repo_id(arg_value)
+ERROR 07-09 09:48:20 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 154, in validate_repo_id
+ERROR 07-09 09:48:20 engine.py:400]     raise HFValidationError(
+ERROR 07-09 09:48:20 engine.py:400] huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/support/llm/Qwen2.5-14B-Instruct'. Use `repo_type` argument if needed.
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 402, in run_mp_engine
+    raise e
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 391, in run_mp_engine
+    engine = MQLLMEngine.from_engine_args(engine_args=engine_args,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 119, in from_engine_args
+    engine_config = engine_args.create_engine_config(usage_context)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1127, in create_engine_config
+    model_config = self.create_model_config()
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1047, in create_model_config
+    return ModelConfig(
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/config.py", line 304, in __init__
+    hf_config = get_config(self.model, trust_remote_code, revision,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 256, in get_config
+    if is_gguf or file_or_path_exists(
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 168, in file_or_path_exists
+    cached_filepath = try_to_load_from_cache(repo_id=model,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 106, in _inner_fn
+    validate_repo_id(arg_value)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 154, in validate_repo_id
+    raise HFValidationError(
+huggingface_hub.errors.HFValidationError: Repo id must be in the form 'repo_name' or 'namespace/repo_name': '/home/support/llm/Qwen2.5-14B-Instruct'. Use `repo_type` argument if needed.

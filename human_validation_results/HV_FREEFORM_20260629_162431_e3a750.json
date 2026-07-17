@@ -1,0 +1,16 @@
+{
+  "session_id": "HV_FREEFORM_20260629_162431_e3a750",
+  "scenario_id": "FREEFORM",
+  "topic": "the student's own research project (to be elicited in conversation)",
+  "mode": "human_validation_cli",
+  "freeform": true,
+  "student_name": "user_name",
+  "backend": "vllm",
+  "model": "/home/support/llm/Qwen2.5-14B-Instruct",
+  "max_turns": 30,
+  "started_utc": "2026-06-29T16:24:31",
+  "transcript": [],
+  "skill_sequence": [],
+  "task_solved": false,
+  "completed": false
+}

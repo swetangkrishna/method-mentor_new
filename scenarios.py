@@ -93,7 +93,7 @@ SCENARIOS = {
                  "note": "Combines breadth and depth at the cost of added complexity."},
             ],
         },
-        "max_turns": 16,
+        "max_turns": 40,
     },
 
     # ── Scenario S02: John — Masters, Parent-Teacher Transitions ─────────────
@@ -173,7 +173,7 @@ SCENARIOS = {
                  "note": "Group dynamics surface shared and divergent experiences."},
             ],
         },
-        "max_turns": 14,
+        "max_turns": 40,
     },
 
     # ── Scenario S03: Liam — PhD, PISA Quantitative Analysis ─────────────────
@@ -256,7 +256,7 @@ SCENARIOS = {
                  "note": "Pairs large-scale patterns with explanatory depth."},
             ],
         },
-        "max_turns": 14,
+        "max_turns": 40,
     },
 }
 
