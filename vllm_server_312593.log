@@ -1,0 +1,168 @@
+INFO 07-21 11:12:19 __init__.py:207] Automatically detected platform cuda.
+INFO 07-21 11:12:20 api_server.py:912] vLLM API server version 0.7.3
+INFO 07-21 11:12:20 api_server.py:913] args: Namespace(host=None, port=54925, uvicorn_log_level='info', allow_credentials=False, allowed_origins=['*'], allowed_methods=['*'], allowed_headers=['*'], api_key=None, lora_modules=None, prompt_adapters=None, chat_template=None, chat_template_content_format='auto', response_role='assistant', ssl_keyfile=None, ssl_certfile=None, ssl_ca_certs=None, ssl_cert_reqs=0, root_path=None, middleware=[], return_tokens_as_token_ids=False, disable_frontend_multiprocessing=False, enable_request_id_headers=False, enable_auto_tool_choice=False, enable_reasoning=False, reasoning_parser=None, tool_call_parser=None, tool_parser_plugin='', model='/home/support/llm/Qwen2.5-72B-Instruct', task='auto', tokenizer=None, skip_tokenizer_init=False, revision=None, code_revision=None, tokenizer_revision=None, tokenizer_mode='auto', trust_remote_code=False, allowed_local_media_path=None, download_dir=None, load_format='auto', config_format=<ConfigFormat.AUTO: 'auto'>, dtype='bfloat16', kv_cache_dtype='auto', max_model_len=8192, guided_decoding_backend='xgrammar', logits_processor_pattern=None, model_impl='auto', distributed_executor_backend=None, pipeline_parallel_size=1, tensor_parallel_size=2, max_parallel_loading_workers=None, ray_workers_use_nsight=False, block_size=None, enable_prefix_caching=None, disable_sliding_window=False, use_v2_block_manager=True, num_lookahead_slots=0, seed=0, swap_space=4, cpu_offload_gb=0, gpu_memory_utilization=0.9, num_gpu_blocks_override=None, max_num_batched_tokens=None, max_num_partial_prefills=1, max_long_partial_prefills=1, long_prefill_token_threshold=0, max_num_seqs=None, max_logprobs=20, disable_log_stats=False, quantization=None, rope_scaling=None, rope_theta=None, hf_overrides=None, enforce_eager=False, max_seq_len_to_capture=8192, disable_custom_all_reduce=False, tokenizer_pool_size=0, tokenizer_pool_type='ray', tokenizer_pool_extra_config=None, limit_mm_per_prompt=None, mm_processor_kwargs=None, disable_mm_preprocessor_cache=False, enable_lora=False, enable_lora_bias=False, max_loras=1, max_lora_rank=16, lora_extra_vocab_size=256, lora_dtype='auto', long_lora_scaling_factors=None, max_cpu_loras=None, fully_sharded_loras=False, enable_prompt_adapter=False, max_prompt_adapters=1, max_prompt_adapter_token=0, device='auto', num_scheduler_steps=1, multi_step_stream_outputs=True, scheduler_delay_factor=0.0, enable_chunked_prefill=None, speculative_model=None, speculative_model_quantization=None, num_speculative_tokens=None, speculative_disable_mqa_scorer=False, speculative_draft_tensor_parallel_size=None, speculative_max_model_len=None, speculative_disable_by_batch_size=None, ngram_prompt_lookup_max=None, ngram_prompt_lookup_min=None, spec_decoding_acceptance_method='rejection_sampler', typical_acceptance_sampler_posterior_threshold=None, typical_acceptance_sampler_posterior_alpha=None, disable_logprobs_during_spec_decoding=None, model_loader_extra_config=None, ignore_patterns=[], preemption_mode=None, served_model_name=['qwen72b'], qlora_adapter_name_or_path=None, otlp_traces_endpoint=None, collect_detailed_traces=None, disable_async_output_proc=False, scheduling_policy='fcfs', scheduler_cls='vllm.core.scheduler.Scheduler', override_neuron_config=None, override_pooler_config=None, compilation_config=None, kv_transfer_config=None, worker_cls='auto', generation_config=None, override_generation_config=None, enable_sleep_mode=False, calculate_kv_scales=False, additional_config=None, disable_log_requests=False, max_log_len=None, disable_fastapi_docs=False, enable_prompt_tokens_details=False)
+INFO 07-21 11:12:20 api_server.py:209] Started engine process with PID 1123671
+INFO 07-21 11:12:29 __init__.py:207] Automatically detected platform cuda.
+INFO 07-21 11:12:31 config.py:549] This model supports multiple tasks: {'score', 'embed', 'generate', 'reward', 'classify'}. Defaulting to 'generate'.
+INFO 07-21 11:12:31 config.py:1382] Defaulting to use mp for distributed inference
+INFO 07-21 11:12:36 config.py:549] This model supports multiple tasks: {'classify', 'embed', 'score', 'reward', 'generate'}. Defaulting to 'generate'.
+INFO 07-21 11:12:36 config.py:1382] Defaulting to use mp for distributed inference
+INFO 07-21 11:12:36 llm_engine.py:234] Initializing a V0 LLM engine (v0.7.3) with config: model='/home/support/llm/Qwen2.5-72B-Instruct', speculative_config=None, tokenizer='/home/support/llm/Qwen2.5-72B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=2, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto,  device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='xgrammar'), observability_config=ObservabilityConfig(otlp_traces_endpoint=None, collect_model_forward_time=False, collect_model_execute_time=False), seed=0, served_model_name=qwen72b, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=False, chunked_prefill_enabled=False, use_async_output_proc=True, disable_mm_preprocessor_cache=False, mm_processor_kwargs=None, pooler_config=None, compilation_config={"splitting_ops":[],"compile_sizes":[],"cudagraph_capture_sizes":[256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"max_capture_size":256}, use_cached_outputs=True, 
+WARNING 07-21 11:12:37 multiproc_worker_utils.py:300] Reducing Torch parallelism from 8 threads to 1 to avoid unnecessary CPU contention. Set OMP_NUM_THREADS in the external environment to tune this value as needed.
+INFO 07-21 11:12:37 custom_cache_manager.py:19] Setting Triton cache manager to: vllm.triton_utils.custom_cache_manager:CustomCacheManager
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:12:37 multiproc_worker_utils.py:229] Worker ready; awaiting tasks
+INFO 07-21 11:12:38 cuda.py:229] Using Flash Attention backend.
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:12:38 cuda.py:229] Using Flash Attention backend.
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:12:39 utils.py:916] Found nccl from library libnccl.so.2
+INFO 07-21 11:12:39 utils.py:916] Found nccl from library libnccl.so.2
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:12:39 pynccl.py:69] vLLM is using nccl==2.21.5
+INFO 07-21 11:12:39 pynccl.py:69] vLLM is using nccl==2.21.5
+INFO 07-21 11:12:39 custom_all_reduce_utils.py:244] reading GPU P2P access cache from /home/sgallagher/.cache/vllm/gpu_p2p_access_cache_for_0,1.json
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:12:39 custom_all_reduce_utils.py:244] reading GPU P2P access cache from /home/sgallagher/.cache/vllm/gpu_p2p_access_cache_for_0,1.json
+INFO 07-21 11:12:39 shm_broadcast.py:258] vLLM message queue communication handle: Handle(connect_ip='127.0.0.1', local_reader_ranks=[1], buffer_handle=(1, 4194304, 6, 'psm_4767ed4b'), local_subscribe_port=49581, remote_subscribe_port=None)
+INFO 07-21 11:12:39 model_runner.py:1110] Starting to load model /home/support/llm/Qwen2.5-72B-Instruct...
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:12:39 model_runner.py:1110] Starting to load model /home/support/llm/Qwen2.5-72B-Instruct...
+Loading safetensors checkpoint shards:   0% Completed | 0/37 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:   3% Completed | 1/37 [00:03<01:54,  3.19s/it]
+Loading safetensors checkpoint shards:   5% Completed | 2/37 [00:06<01:54,  3.26s/it]
+Loading safetensors checkpoint shards:   8% Completed | 3/37 [00:09<01:47,  3.15s/it]
+Loading safetensors checkpoint shards:  11% Completed | 4/37 [00:12<01:48,  3.27s/it]
+Loading safetensors checkpoint shards:  14% Completed | 5/37 [00:16<01:43,  3.23s/it]
+Loading safetensors checkpoint shards:  16% Completed | 6/37 [00:19<01:37,  3.14s/it]
+Loading safetensors checkpoint shards:  19% Completed | 7/37 [00:21<01:30,  3.03s/it]
+Loading safetensors checkpoint shards:  22% Completed | 8/37 [00:24<01:27,  3.02s/it]
+Loading safetensors checkpoint shards:  24% Completed | 9/37 [00:27<01:22,  2.96s/it]
+Loading safetensors checkpoint shards:  27% Completed | 10/37 [00:29<01:12,  2.68s/it]
+Loading safetensors checkpoint shards:  30% Completed | 11/37 [00:32<01:10,  2.70s/it]
+Loading safetensors checkpoint shards:  32% Completed | 12/37 [00:35<01:07,  2.71s/it]
+Loading safetensors checkpoint shards:  35% Completed | 13/37 [00:38<01:05,  2.72s/it]
+Loading safetensors checkpoint shards:  38% Completed | 14/37 [00:40<01:02,  2.70s/it]
+Loading safetensors checkpoint shards:  41% Completed | 15/37 [00:43<01:01,  2.78s/it]
+Loading safetensors checkpoint shards:  43% Completed | 16/37 [00:46<00:58,  2.77s/it]
+Loading safetensors checkpoint shards:  46% Completed | 17/37 [00:49<00:57,  2.86s/it]
+Loading safetensors checkpoint shards:  49% Completed | 18/37 [00:53<01:00,  3.17s/it]
+Loading safetensors checkpoint shards:  51% Completed | 19/37 [00:56<00:59,  3.30s/it]
+Loading safetensors checkpoint shards:  54% Completed | 20/37 [01:00<00:58,  3.45s/it]
+Loading safetensors checkpoint shards:  57% Completed | 21/37 [01:04<00:55,  3.48s/it]
+Loading safetensors checkpoint shards:  59% Completed | 22/37 [01:08<00:53,  3.58s/it]
+Loading safetensors checkpoint shards:  62% Completed | 23/37 [01:11<00:50,  3.59s/it]
+Loading safetensors checkpoint shards:  65% Completed | 24/37 [01:15<00:45,  3.53s/it]
+Loading safetensors checkpoint shards:  68% Completed | 25/37 [01:17<00:39,  3.26s/it]
+Loading safetensors checkpoint shards:  70% Completed | 26/37 [01:21<00:36,  3.31s/it]
+Loading safetensors checkpoint shards:  73% Completed | 27/37 [01:24<00:33,  3.33s/it]
+Loading safetensors checkpoint shards:  76% Completed | 28/37 [01:27<00:30,  3.36s/it]
+Loading safetensors checkpoint shards:  78% Completed | 29/37 [01:31<00:26,  3.37s/it]
+Loading safetensors checkpoint shards:  81% Completed | 30/37 [01:34<00:23,  3.40s/it]
+Loading safetensors checkpoint shards:  84% Completed | 31/37 [01:38<00:20,  3.39s/it]
+Loading safetensors checkpoint shards:  86% Completed | 32/37 [01:41<00:16,  3.37s/it]
+Loading safetensors checkpoint shards:  89% Completed | 33/37 [01:45<00:13,  3.42s/it]
+Loading safetensors checkpoint shards:  92% Completed | 34/37 [01:48<00:10,  3.53s/it]
+Loading safetensors checkpoint shards:  95% Completed | 35/37 [01:52<00:07,  3.65s/it]
+Loading safetensors checkpoint shards:  97% Completed | 36/37 [01:57<00:03,  3.94s/it]
+Loading safetensors checkpoint shards: 100% Completed | 37/37 [02:00<00:00,  3.82s/it]
+Loading safetensors checkpoint shards: 100% Completed | 37/37 [02:00<00:00,  3.27s/it]
+
+INFO 07-21 11:14:41 model_runner.py:1115] Loading model weights took 67.8002 GB
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:14:41 model_runner.py:1115] Loading model weights took 67.8002 GB
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:14:49 worker.py:267] Memory profiling takes 8.29 seconds
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:14:49 worker.py:267] the current vLLM instance can use total_gpu_memory (79.26GiB) x gpu_memory_utilization (0.90) = 71.33GiB
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m INFO 07-21 11:14:49 worker.py:267] model weights take 67.80GiB; non_torch_memory takes 1.54GiB; PyTorch activation peak memory takes 1.31GiB; the rest of the memory reserved for KV Cache is 0.68GiB.
+INFO 07-21 11:14:50 worker.py:267] Memory profiling takes 8.37 seconds
+INFO 07-21 11:14:50 worker.py:267] the current vLLM instance can use total_gpu_memory (79.26GiB) x gpu_memory_utilization (0.90) = 71.33GiB
+INFO 07-21 11:14:50 worker.py:267] model weights take 67.80GiB; non_torch_memory takes 1.54GiB; PyTorch activation peak memory takes 1.51GiB; the rest of the memory reserved for KV Cache is 0.48GiB.
+INFO 07-21 11:14:50 executor_base.py:111] # cuda blocks: 195, # CPU blocks: 1638
+INFO 07-21 11:14:50 executor_base.py:116] Maximum concurrency for 8192 tokens per request: 0.38x
+ERROR 07-21 11:14:50 engine.py:400] The model's max seq len (8192) is larger than the maximum number of tokens that can be stored in KV cache (3120). Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
+ERROR 07-21 11:14:50 engine.py:400] Traceback (most recent call last):
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 391, in run_mp_engine
+ERROR 07-21 11:14:50 engine.py:400]     engine = MQLLMEngine.from_engine_args(engine_args=engine_args,
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 124, in from_engine_args
+ERROR 07-21 11:14:50 engine.py:400]     return cls(ipc_path=ipc_path,
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 76, in __init__
+ERROR 07-21 11:14:50 engine.py:400]     self.engine = LLMEngine(*args, **kwargs)
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/llm_engine.py", line 276, in __init__
+ERROR 07-21 11:14:50 engine.py:400]     self._initialize_kv_caches()
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/llm_engine.py", line 434, in _initialize_kv_caches
+ERROR 07-21 11:14:50 engine.py:400]     self.model_executor.initialize_cache(num_gpu_blocks, num_cpu_blocks)
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/executor_base.py", line 122, in initialize_cache
+ERROR 07-21 11:14:50 engine.py:400]     self.collective_rpc("initialize_cache",
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/executor_base.py", line 316, in collective_rpc
+ERROR 07-21 11:14:50 engine.py:400]     return self._run_workers(method, *args, **(kwargs or {}))
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/mp_distributed_executor.py", line 185, in _run_workers
+ERROR 07-21 11:14:50 engine.py:400]     driver_worker_output = run_method(self.driver_worker, sent_method,
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/utils.py", line 2196, in run_method
+ERROR 07-21 11:14:50 engine.py:400]     return func(*args, **kwargs)
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/worker/worker.py", line 291, in initialize_cache
+ERROR 07-21 11:14:50 engine.py:400]     raise_if_cache_size_invalid(num_gpu_blocks,
+ERROR 07-21 11:14:50 engine.py:400]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/worker/worker.py", line 544, in raise_if_cache_size_invalid
+ERROR 07-21 11:14:50 engine.py:400]     raise ValueError(
+ERROR 07-21 11:14:50 engine.py:400] ValueError: The model's max seq len (8192) is larger than the maximum number of tokens that can be stored in KV cache (3120). Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242] Exception in worker VllmWorkerProcess while processing method initialize_cache.
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242] Traceback (most recent call last):
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/multiproc_worker_utils.py", line 236, in _run_worker_process
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]     output = run_method(worker, method, args, kwargs)
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/utils.py", line 2196, in run_method
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]     return func(*args, **kwargs)
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/worker/worker.py", line 291, in initialize_cache
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]     raise_if_cache_size_invalid(num_gpu_blocks,
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]   File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/worker/worker.py", line 544, in raise_if_cache_size_invalid
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242]     raise ValueError(
+[1;36m(VllmWorkerProcess pid=1123809)[0;0m ERROR 07-21 11:14:50 multiproc_worker_utils.py:242] ValueError: The model's max seq len (8192) is larger than the maximum number of tokens that can be stored in KV cache (3120). Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
+Process SpawnProcess-1:
+INFO 07-21 11:14:50 multiproc_worker_utils.py:128] Killing local vLLM worker processes
+Traceback (most recent call last):
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 402, in run_mp_engine
+    raise e
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 391, in run_mp_engine
+    engine = MQLLMEngine.from_engine_args(engine_args=engine_args,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 124, in from_engine_args
+    return cls(ipc_path=ipc_path,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/multiprocessing/engine.py", line 76, in __init__
+    self.engine = LLMEngine(*args, **kwargs)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/llm_engine.py", line 276, in __init__
+    self._initialize_kv_caches()
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/engine/llm_engine.py", line 434, in _initialize_kv_caches
+    self.model_executor.initialize_cache(num_gpu_blocks, num_cpu_blocks)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/executor_base.py", line 122, in initialize_cache
+    self.collective_rpc("initialize_cache",
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/executor_base.py", line 316, in collective_rpc
+    return self._run_workers(method, *args, **(kwargs or {}))
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/executor/mp_distributed_executor.py", line 185, in _run_workers
+    driver_worker_output = run_method(self.driver_worker, sent_method,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/utils.py", line 2196, in run_method
+    return func(*args, **kwargs)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/worker/worker.py", line 291, in initialize_cache
+    raise_if_cache_size_invalid(num_gpu_blocks,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/worker/worker.py", line 544, in raise_if_cache_size_invalid
+    raise ValueError(
+ValueError: The model's max seq len (8192) is larger than the maximum number of tokens that can be stored in KV cache (3120). Try increasing `gpu_memory_utilization` or decreasing `max_model_len` when initializing the engine.
+[rank0]:[W721 11:14:51.933736201 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+Traceback (most recent call last):
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 991, in <module>
+    uvloop.run(run_server(args))
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
+    return loop.run_until_complete(wrapper())
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
+    return await main
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 947, in run_server
+    async with build_async_engine_client(args) as engine_client:
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 139, in build_async_engine_client
+    async with build_async_engine_client_from_engine_args(
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/contextlib.py", line 199, in __aenter__
+    return await anext(self.gen)
+  File "/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 233, in build_async_engine_client_from_engine_args
+    raise RuntimeError(
+RuntimeError: Engine process failed to start. See stack trace for the root cause.
+/home/sgallagher/anaconda3/envs/mm_2026/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 1 leaked shared_memory objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

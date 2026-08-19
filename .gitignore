@@ -1,3 +1,14 @@
 __pycache__/
 *.pyc
 .env
+
+# SQLite runtime files
+*.db-shm
+*.db-wal
+
+# Migration diagnostics
+method_mentor_azure_inventory.txt
+azure_model_runtime.txt
+
+# vLLM runtime logs
+vllm_server_*.log

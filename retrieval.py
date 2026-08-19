@@ -123,7 +123,7 @@ def retrieve(query: str, k: Optional[int] = None,
     Returns [] if RAG is unavailable, the query is empty, or nothing passes the
     distance threshold. Never raises — failures degrade to [].
     """
-    if not query or not rag_available():
+    if not _norm_query(query) or not rag_available():
         return []
     k = k or C.RAG_TOP_K
 
