@@ -12,3 +12,8 @@ azure_model_runtime.txt
 
 # vLLM runtime logs
 vllm_server_*.log
+
+# Generated RAG index/cache
+rag_cache/faiss.index
+rag_cache/chunks.jsonl
+rag_cache/meta.json
