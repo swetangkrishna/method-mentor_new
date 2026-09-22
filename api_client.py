@@ -336,7 +336,74 @@ def check_ollama_running() -> dict:
             return {"running": True, "models": models, "error": None}
     except Exception as e:
         return {"running": False, "models": [], "error": str(e)}
+# ── Azure AI Foundry ─────────────────────────────────────────────────────────
 
+def _call_azure_foundry(
+    messages: List[Dict],
+    system: str,
+    max_tokens: int,
+    temperature: float,
+    cfg: dict,
+    prefill: str = "",
+) -> str:
+    """
+    Call Microsoft Foundry through its OpenAI-compatible chat-completions API.
+
+    The deployment name is supplied as `model`, e.g. `llama70b`.
+    """
+
+    endpoint = cfg["endpoint"].rstrip("/")
+    api_key = cfg["api_key"]
+
+    msgs = _with_system(messages, system)
+
+    payload = {
+        "model": cfg["model"],
+        "messages": msgs,
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+        "stream": False,
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "api-key": api_key,
+    }
+
+    try:
+        body = _post_urllib(
+            f"{endpoint}/chat/completions",
+            payload,
+            headers,
+            timeout=cfg.get("timeout", 300),
+        )
+
+        content = body["choices"][0]["message"]["content"]
+
+        # Azure does not expose vLLM's continue_final_message behaviour.
+        # For now preserve the downstream contract when a prefill exists.
+        if prefill:
+            if content.startswith(prefill):
+                return content
+            return prefill + content
+
+        return content
+
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode(
+            "utf-8",
+            errors="replace"
+        )
+
+        raise RuntimeError(
+            f"Azure Foundry API error {e.code}: {detail[:1000]}"
+        )
+
+    except Exception as e:
+        raise RuntimeError(
+            f"Azure Foundry request failed at {endpoint}.\n"
+            f"Detail: {e}"
+        )
 
 # ── vLLM (OpenAI-compatible local server on the cluster) ──────────────────────
 
@@ -470,11 +537,57 @@ def call_llm(messages: List[Dict], system: str = "", max_tokens: int = 1024,
              prefill: str = "") -> str:
     cfg = get_config(role)
     b   = cfg["backend"]
-    if   b == "vllm":         return _call_vllm(messages, system, max_tokens, temperature, cfg, prefill=prefill)
-    elif b == "huggingface": return _call_hf(messages, system, max_tokens, temperature, cfg)
-    elif b == "ollama":       return _call_ollama(messages, system, max_tokens, temperature, cfg, prefill=prefill)
-    elif b == "anthropic":    return _call_anthropic(messages, system, max_tokens, temperature)
-    else: raise ValueError(f"Unknown backend '{b}'. Edit model_config.py.")
+    if b == "azure_foundry":
+    return _call_azure_foundry(
+        messages,
+        system,
+        max_tokens,
+        temperature,
+        cfg,
+        prefill=prefill,
+    )
+
+elif b == "vllm":
+    return _call_vllm(
+        messages,
+        system,
+        max_tokens,
+        temperature,
+        cfg,
+        prefill=prefill,
+    )
+
+elif b == "huggingface":
+    return _call_hf(
+        messages,
+        system,
+        max_tokens,
+        temperature,
+        cfg,
+    )
+
+elif b == "ollama":
+    return _call_ollama(
+        messages,
+        system,
+        max_tokens,
+        temperature,
+        cfg,
+        prefill=prefill,
+    )
+
+elif b == "anthropic":
+    return _call_anthropic(
+        messages,
+        system,
+        max_tokens,
+        temperature,
+    )
+
+else:
+    raise ValueError(
+        f"Unknown backend '{b}'."
+    )
 
 
 def call_llm_precise(messages: List[Dict], system: str = "",
