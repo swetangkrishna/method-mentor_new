@@ -33,7 +33,7 @@ import os
 # ═══════════════════════════════════════════════════════
 #  CHANGE THIS ONE LINE TO SWITCH BACKEND
 # ═══════════════════════════════════════════════════════
-BACKEND = "ollama"   # "ollama" | "vllm" | "huggingface" | "anthropic"
+BACKEND = "azure_foundry"   # "azure_foundry" | "vllm" | "ollama" | "huggingface" | "anthropic"
 
 # ── vLLM (cluster: A100-80GB, OpenAI-compatible server) ──────────────────────
 # On the cluster the model weights live under /home/support/llm/. We serve them
@@ -51,7 +51,23 @@ VLLM_CTX      = 8192
 VLLM_TIMEOUT  = 300                         # generous; first call after load is slow
 VLLM_API_KEY  = "EMPTY"                     # vLLM ignores the key but the client sends one
 
+# ── Azure AI Foundry ─────────────────────────────────────────────────────────
+AZURE_FOUNDRY_MODEL = "llama70b"
 
+# Example:
+# https://method-mentor-foundry-29107.services.ai.azure.com/openai/v1
+AZURE_FOUNDRY_ENDPOINT = os.environ.get(
+    "AZURE_FOUNDRY_ENDPOINT",
+    ""
+)
+
+# NEVER hard-code the key here.
+AZURE_FOUNDRY_API_KEY = os.environ.get(
+    "AZURE_FOUNDRY_KEY",
+    ""
+)
+
+AZURE_FOUNDRY_TIMEOUT = 300
 # ── HuggingFace ──────────────────────────────────────────────────────────────
 # Recommended 13B–14B free-tier models (best → fallback):
 #   "Qwen/Qwen2.5-14B-Instruct"              ← best instruction following
@@ -88,8 +104,49 @@ SCORER_MODEL  = None
 def get_config(role: str = "default") -> dict:
     """Resolve full config dict for a given role."""
     backend = os.environ.get("LLM_BACKEND", BACKEND)
-
-    if backend == "vllm":
+    if backend == "azure_foundry":
+      model = os.environ.get(
+          "AZURE_FOUNDRY_MODEL",
+          AZURE_FOUNDRY_MODEL
+      )
+  
+      overrides = {
+          "agent": AGENT_MODEL,
+          "persona": PERSONA_MODEL,
+          "scorer": SCORER_MODEL,
+      }
+  
+      model = overrides.get(role) or model
+  
+      endpoint = os.environ.get(
+          "AZURE_FOUNDRY_ENDPOINT",
+          AZURE_FOUNDRY_ENDPOINT
+      ).rstrip("/")
+  
+      api_key = os.environ.get(
+          "AZURE_FOUNDRY_KEY",
+          AZURE_FOUNDRY_API_KEY
+      )
+  
+      if not endpoint:
+          raise RuntimeError(
+              "AZURE_FOUNDRY_ENDPOINT is not set."
+          )
+  
+      if not api_key:
+          raise RuntimeError(
+              "AZURE_FOUNDRY_KEY is not set."
+          )
+  
+      return {
+          "backend": "azure_foundry",
+          "model": model,
+          "endpoint": endpoint,
+          "api_key": api_key,
+          "timeout": AZURE_FOUNDRY_TIMEOUT,
+      }
+  
+    elif backend == "vllm":
         model = os.environ.get("VLLM_MODEL", VLLM_MODEL)
         overrides = {"agent": AGENT_MODEL, "persona": PERSONA_MODEL, "scorer": SCORER_MODEL}
         model = overrides.get(role) or model
@@ -142,7 +199,11 @@ def print_config():
     print("┌─ LLM Backend " + "─" * 42)
     print(f"│  Backend : {b}")
     print(f"│  Model   : {cfg.get('model_display', cfg['model'])}")
-    if b == "vllm":
+    if b == "azure_foundry":
+      print(f"│  Endpoint: {cfg['endpoint']}")
+      print(f"│  Timeout : {cfg['timeout']}s")
+
+    elif b == "vllm":
         print(f"│  Host    : {cfg['vllm_host']}")
         print(f"│  Context : {cfg['context_length']} tokens  |  Timeout: {cfg['timeout']}s")
     elif b == "huggingface":
