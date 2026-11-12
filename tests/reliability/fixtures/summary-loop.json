@@ -1,0 +1,22 @@
+[
+  {
+    "role": "assistant",
+    "content": "How would you summarise your reasoning for your supervisor?"
+  },
+  {
+    "role": "user",
+    "content": "A pragmatic combination seems useful. I would count recurring characteristics, but also examine what authors mean by adaptation. I am unsure whether that makes this a mixed-methods study or just a review with different kinds of summaries."
+  },
+  {
+    "role": "user",
+    "content": "I am leaning toward a scoping review, but I cannot defend that choice yet. I first need to know whether the literature describes adaptation clearly enough for a consistent extraction framework."
+  },
+  {
+    "role": "user",
+    "content": "I cannot name a defensible reconsideration threshold yet. Suppose my five pilot papers include two that use the word adaptive without explaining what changes. I am unsure whether to exclude them or code adaptation as unclear."
+  },
+  {
+    "role": "user",
+    "content": "Before summarising for my supervisor, I need to think through that inclusion rule. Including unclear papers could expose reporting gaps; excluding them could give a misleadingly tidy picture. I have not decided which risk matters more."
+  }
+]

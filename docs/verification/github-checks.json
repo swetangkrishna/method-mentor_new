@@ -1,0 +1,9 @@
+{
+  "tests_run": 98,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 1,
+  "passed": true,
+  "scope": "local tests; inference mocked except previously recorded live evidence",
+  "runtime_imports_verified": true
+}

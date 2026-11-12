@@ -24,12 +24,13 @@ Usage:
 """
 
 import json
+import os
 import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-DB_PATH = Path(__file__).parent / "db" / "pedagogy_rl.db"
+DB_PATH = Path(os.environ.get("DB_PATH", str(Path(__file__).parent / "db" / "pedagogy_rl.db")))
 
 
 class Database:
@@ -111,12 +112,32 @@ class Database:
             timestamp               TEXT NOT NULL
         );
 
+        CREATE TABLE IF NOT EXISTS reward_records (
+            session_id TEXT PRIMARY KEY REFERENCES sessions(id), payload TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS stage_log (
+            session_id TEXT NOT NULL REFERENCES sessions(id),
+            turn_number INTEGER NOT NULL, turn_id INTEGER,
+            stage INTEGER NOT NULL, declared_stage INTEGER, details TEXT NOT NULL,
+            PRIMARY KEY(session_id, turn_number)
+        );
         CREATE INDEX IF NOT EXISTS idx_turns_session    ON turns(session_id);
         CREATE INDEX IF NOT EXISTS idx_skill_session    ON skill_uses(session_id);
         CREATE INDEX IF NOT EXISTS idx_survey_session   ON survey_responses(session_id);
         CREATE INDEX IF NOT EXISTS idx_skill_name       ON skill_uses(skill_name);
         """)
         self.conn.commit()
+
+    def log_stage(self, session_id, turn_id, turn_number, stage, declared=None, **details):
+        self.conn.execute("""INSERT INTO stage_log VALUES (?,?,?,?,?,?)
+            ON CONFLICT(session_id,turn_number) DO UPDATE SET
+            turn_id=excluded.turn_id,stage=excluded.stage,declared_stage=excluded.declared_stage,details=excluded.details""",
+            (session_id,turn_number,turn_id,int(stage),declared,json.dumps(details)))
+        self.conn.commit()
+
+    def get_stages(self, session_id):
+        return [dict(r) for r in self.conn.execute(
+            'SELECT * FROM stage_log WHERE session_id=? ORDER BY turn_number',(session_id,))]
 
     # ── Sessions ──────────────────────────────────────────────────────────────
 
@@ -301,6 +322,11 @@ class Database:
     # ── Rewards ───────────────────────────────────────────────────────────────
 
     def log_reward(self, session_id: str, reward_data: Dict):
+        self.conn.execute('INSERT INTO reward_records VALUES (?,?) ON CONFLICT(session_id) DO UPDATE SET payload=excluded.payload',
+                          (session_id,json.dumps(reward_data)))
+        self.conn.commit()
+        if reward_data.get('reward') is None:
+            return
         c = reward_data.get("components", {})
         self.conn.execute("""
             INSERT INTO rewards

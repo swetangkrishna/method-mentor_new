@@ -3,7 +3,7 @@ rag_config.py — Configuration for the RAG retrieval layer (Option A: retrieval
 informs the agent's scaffolding; it is NEVER used to hand the student answers).
 
 Everything here is read by retrieval.py and build_index.py. Paths default to the
-cluster layout but can be overridden with environment variables.
+repository layout but can be overridden with environment variables.
 """
 
 import os
@@ -12,7 +12,7 @@ import os
 # Directory containing the research-methods PDFs (the ~30 textbooks).
 RAG_PDF_DIR = os.environ.get(
     "RAG_PDF_DIR",
-    "/home/skrishna/method-mentor-main/method-mentor-new/method-mentor_new/RAG",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "RAG"),
 )
 
 # Sample webpages to test the web side of retrieval. Replace with the real
@@ -65,3 +65,7 @@ RAG_TRIGGER_TERMS = [
     "regression", "statistic", "variable", "correlation", "significance",
     "data analysis", "research design", "secondary data", "dataset",
 ]
+
+# PDF conversion: use embedded text by default; scanned PDFs need OCR.
+RAG_DO_OCR = os.environ.get("RAG_DO_OCR", "0") == "1"
+RAG_DO_TABLE_STRUCTURE = os.environ.get("RAG_DO_TABLE_STRUCTURE", "0") == "1"

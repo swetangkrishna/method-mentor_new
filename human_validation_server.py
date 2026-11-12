@@ -10,13 +10,18 @@ Run:
 """
 
 import json
+import copy
+import web_sessions
 import os
 import sys
 import uuid
+import time
+from threading import RLock
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, g, session
+from markupsafe import escape
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -30,11 +35,146 @@ from stage_tracker import StageTracker
 from stages import FINAL_STAGE, stage_name
 
 app    = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET", "pedagogy-rl-2025")
+from web_access import install_access
+from human_validation import make_freeform_scenario, _retrieve_for_turn, _detect_method
+install_access(app)
+_API_LOCK = RLock()
+
+
+@app.before_request
+def serialize_requests():
+    # One process, serialized DB/session mutations for the small research pilot.
+    if request.path.startswith('/api/') or request.path == '/results':
+        _API_LOCK.acquire()
+        g.api_locked = True
+
+
+@app.teardown_request
+def release_request(_error):
+    if getattr(g, 'api_locked', False):
+        _API_LOCK.release()
+
+
+@app.get('/healthz')
+def health():
+    return jsonify(status='ok')
+
+
+def resolve_scenario(scenario_id):
+    if scenario_id == 'FREEFORM':
+        return make_freeform_scenario('Participant')
+    return next((s for s in SCENARIOS.values() if s['id'] == scenario_id), None)
+
+
+def owned_session(session_id):
+    if RESEARCH:
+        sess = RESEARCH.load(session_id, g.participant)
+        if sess:
+            SESSIONS[session_id] = sess
+            # The legacy SQLite database is a disposable display cache in study mode.
+            if not DB.get_session(session_id):
+                sc = sess['scenario']
+                DB.create_session(session_id, sc['id'], sc['topic'], 'human_validation',
+                                  CFG['backend'], CFG['model'], sc['max_turns'], g.participant)
+        return sess
+    sess = SESSIONS.get(session_id)
+    if not sess:
+        sess = web_sessions.load(session_id)
+        if sess and sess['owner'] == g.participant:
+            SESSIONS[session_id] = sess
+    return sess if sess and sess['owner'] == g.participant else None
+
 
 SKILLS = load_all_skills()
 DB     = Database()
 CFG    = get_config()
+from research_runtime import StudyRuntime, StudyError, turn_event
+RESEARCH = StudyRuntime(SKILLS, CFG) if os.environ.get('STUDY_ENABLED') == '1' else None
+
+
+def persist(sess, event):
+    if RESEARCH and sess.get('research'):
+        RESEARCH.save(sess, event)
+    else:
+        web_sessions.save(sess)
+    SESSIONS[sess['session_id']] = sess
+
+
+def retrieve_for_session(sc, stage, message, cache, research=None):
+    if research and not research['configuration']['rag']:
+        return '', [], False
+    return _retrieve_for_turn(sc, stage, message, cache)
+
+
+@app.errorhandler(StudyError)
+def study_error(error):
+    return jsonify(error=str(error), code='study_validation'), 400
+
+
+def record_failure(error, category):
+    reference=uuid.uuid4().hex
+    if RESEARCH:
+        try:
+            request_data = request.get_json(silent=True) or {}
+            data = {'type': type(error).__name__,'category': category,'route': request.path,'session_id': request_data.get('session_id'),'at': time.time()}
+            from failure_records import safe_diagnostics
+            data['diagnostics'] = safe_diagnostics(error)
+            data['protocol_hash'] = RESEARCH.protocol['hash']
+            data['code_hash'] = RESEARCH.provenance['code_hash']
+            data['model'] = RESEARCH.provenance['model']
+            # Only known validation labels; never store exception text or provider payloads.
+            if str(error).startswith('Tutor response did not meet the study action/quality contract:'):
+                known={'action_mismatch','empty_response','multiple_questions','method_endorsement','critic_rejected','repeated_closing_prompt','declarative_question'}
+                data['issues']=[v for v in str(error).split(':',1)[1].strip().split(',') if v in known]
+            RESEARCH.store.put('error',reference,g.participant,RESEARCH.study,data)
+        except Exception:
+            app.logger.error('Error record could not be saved reference=%s category=%s',reference,category)
+    app.logger.warning('Request failed category=%s reference=%s',category,reference)
+    return reference
+
+
+@app.errorhandler(ValueError)
+def invalid_model_format(error):
+    reference=record_failure(error,'generation_validation')
+    return jsonify(error='The model could not complete this turn.',reference=reference),503
+
+
+@app.post('/api/study/info')
+def study_info():
+    if not RESEARCH: return jsonify(error='Study mode is not enabled'), 400
+    return jsonify(RESEARCH.information(g.participant))
+
+
+@app.post('/api/study/enroll')
+def study_enroll():
+    if not RESEARCH: return jsonify(error='Study mode is not enabled'), 400
+    d = request.get_json() or {}
+    return jsonify(RESEARCH.enroll(g.participant, d.get('consent'), d.get('pre'), d.get('confidence')))
+
+
+@app.post('/api/study/post')
+def study_post():
+    if not RESEARCH: return jsonify(error='Study mode is not enabled'), 400
+    d = request.get_json() or {}
+    return jsonify(RESEARCH.finish_assessment(g.participant, d.get('session_id'), d.get('text'), d.get('confidence'), d.get('sus', [])))
+
+
+@app.post('/api/study/withdraw')
+def study_withdraw():
+    if not RESEARCH: return jsonify(error='Study mode is not enabled'), 400
+    if (request.get_json() or {}).get('confirm') is not True:
+        return jsonify(error='Confirm withdrawal before continuing'), 400
+    ids = [r['id'] for r in RESEARCH.store.records(kind='session', study=RESEARCH.study, owner=g.participant)]
+    result = RESEARCH.withdraw(g.participant)
+    for sid in ids:
+        SESSIONS.pop(sid, None)
+        for table in ('stage_log','skill_uses','turns','survey_responses','rewards','reward_records'):
+            DB.conn.execute('DELETE FROM '+table+' WHERE session_id=?',(sid,))
+        DB.conn.execute('DELETE FROM sessions WHERE id=?',(sid,))
+        web_sessions.path_for(sid).unlink(missing_ok=True)
+    DB.conn.commit()
+    return jsonify(result)
+
 
 # In-memory session store (complement to DB for live state)
 SESSIONS: dict = {}
@@ -43,7 +183,7 @@ SESSIONS: dict = {}
 # ── HTML pages ────────────────────────────────────────────────────────────────
 
 def _scenario_page() -> str:
-    cards = ""
+    cards = '<div class="card" onclick="location.href=\'/chat/FREEFORM\'"><h2>My own research project</h2><p>Discuss your research question with Method Mentor.</p></div>'
     for key, sc in SCENARIOS.items():
         role_color = "#e1f5ee" if sc["role"] == "tutor" else "#eeedfe"
         role_text  = "#085041" if sc["role"] == "tutor" else "#3c3489"
@@ -93,8 +233,8 @@ h1{{font-size:22px;font-weight:600;margin-bottom:6px}}
   After the chat, fill a short survey — your rating becomes part of the RL reward signal.
 </div>
 <div class="nav">
-  <a href="/results">📊 Results dashboard</a>
-  <a href="/api/db-stats">🗄 DB stats</a>
+  {'<a href="/results">Results dashboard</a>' if g.is_admin else ''}
+  <form method="post" action="/logout"><input type="hidden" name="csrf" value="{session['csrf']}"><button>Sign out</button></form>
 </div>
 <p style="font-size:13px;color:#666;margin-bottom:14px">Choose a scenario:</p>
 {cards}
@@ -217,8 +357,7 @@ textarea.oq:focus{{border-color:#1a1a18}}
     <div class="band" id="rewardBand">—</div>
     <div class="breakdown" id="breakdown"></div>
     <button class="btn-done" onclick="location.href='/'">← Choose another scenario</button>
-    <button class="btn-done" style="margin-left:8px;background:#e6f1fb;color:#0c447c"
-            onclick="location.href='/results'">📊 See all results</button>
+
   </div>
 </div>
 
@@ -229,8 +368,21 @@ let sessionId = null, turnCount = 0, ended = false;
 const ratings = {{}};
 
 async function startSession() {{
+  const saved = sessionStorage.getItem('method-mentor-' + scenarioId);
+  if(saved) {{
+    const old = await post('/api/resume', {{session_id:saved}});
+    if(!old.error && !old.survey_result) {{
+      sessionId=old.session_id; turnCount=old.turn_count; ended=old.ended;
+      old.history.forEach(m=>addMsg(m.role==='assistant'?'agent':'user', m.content));
+      updateCounter();
+      if(ended) document.getElementById('surveyOverlay').classList.add('show');
+      return;
+    }}
+  }}
   const r = await post('/api/start', {{scenario_id: scenarioId}});
+  if(r.error) {{ addMsg('agent', r.error); return; }}
   sessionId = r.session_id;
+  sessionStorage.setItem('method-mentor-' + scenarioId, sessionId);
   addMsg('agent', r.agent_message, r.skill_used);
   turnCount = 1; updateCounter();
 }}
@@ -274,7 +426,7 @@ async function send() {{
   try {{
     const r = await post('/api/message', {{session_id:sessionId, message:text}});
     document.getElementById('thinking')?.remove();
-    if(r.error) {{ addMsg('agent', 'Error: '+r.error, null); }}
+    if(r.error) {{ inp.value=text; addMsg('agent', 'Error: '+r.error, null); }}
     else {{
       addMsg('agent', r.agent_message, r.skill_used);
       turnCount = r.turn_count; updateCounter();
@@ -282,18 +434,21 @@ async function send() {{
     }}
   }} catch(e) {{
     document.getElementById('thinking')?.remove();
-    addMsg('agent', 'Network error — try again.', null);
+    inp.value = text;
+    addMsg('agent', 'Connection interrupted. Refresh to check whether your turn was saved before resending.', null);
   }}
   document.getElementById('sendBtn').disabled = false;
   document.getElementById('inp').focus();
 }}
 
 async function endSession(solved) {{
-  if(ended) return; ended = true;
+  if(ended) return;
+  const result = await post('/api/end', {{session_id:sessionId, task_solved:solved}});
+  if(result.error) {{ alert(result.error); return; }}
+  ended = true;
   document.getElementById('sendBtn').disabled = true;
   document.querySelectorAll('.btn-ok,.btn-end').forEach(b=>b.disabled=true);
   document.getElementById('statusPill').textContent = solved ? 'Complete' : 'Ended';
-  await post('/api/end', {{session_id:sessionId, task_solved:solved}});
   document.getElementById('surveyOverlay').classList.add('show');
 }}
 
@@ -311,6 +466,7 @@ async function submitSurvey() {{
   survey['Q_open'] = {{score:null, comment: document.getElementById('Q_open_txt')?.value||''}};
   document.getElementById('submitBtn').disabled = true;
   const r = await post('/api/survey', {{session_id:sessionId, survey}});
+  if(r.error) {{ alert(r.error); document.getElementById('submitBtn').disabled=false; return; }}
   document.getElementById('surveyOverlay').classList.remove('show');
   document.getElementById('rewardVal').textContent  = r.reward.reward.toFixed(3);
   document.getElementById('rewardBand').textContent = r.reward_band;
@@ -325,7 +481,9 @@ async function submitSurvey() {{
 
 async function post(url, body) {{
   const r = await fetch(url, {{method:'POST',
-    headers:{{'Content-Type':'application/json'}}, body:JSON.stringify(body)}});
+    headers:{{'Content-Type':'application/json', 'X-CSRF-Token': {json.dumps(session['csrf'])}}}, body:JSON.stringify(body)}});
+  if(!r.headers.get('content-type')?.includes('application/json'))
+    return {{error:'The server is unavailable. Try again shortly.'}};
   return r.json();
 }}
 
@@ -454,19 +612,65 @@ def results_page():
 
 @app.route("/chat/<scenario_id>")
 def chat(scenario_id: str):
-    sc = next((s for s in SCENARIOS.values() if s["id"] == scenario_id), None)
+    sc = resolve_scenario(scenario_id)
     if not sc:
-        return f"Scenario '{scenario_id}' not found.", 404
+        return f"Scenario '{escape(scenario_id)}' not found.", 404
     return _chat_page(sc)
+
+
+@app.errorhandler(RuntimeError)
+def model_error(error):
+    from api_client import AzureBackendError, PrefillContractError
+    category=('azure_'+error.category if isinstance(error,AzureBackendError) else
+              'azure_prefix' if isinstance(error,PrefillContractError) else 'backend_request')
+    reference=record_failure(error,category)
+    code = 'provider_content_filter' if category == 'azure_content_filter' else 'model_unavailable'
+    return jsonify(error='The model could not complete this turn.',reference=reference,code=code),503
+
+
+@app.errorhandler(Exception)
+def unexpected_request_error(error):
+    from werkzeug.exceptions import HTTPException
+    if isinstance(error, HTTPException):
+        return error
+    reference = record_failure(error, 'internal_request')
+    return jsonify(error='This action could not be completed. Reopen your saved conversation before trying again.',
+                   reference=reference, code='operation_unavailable'), 503
+
+
+@app.post('/api/sessions')
+def participant_sessions():
+    if not RESEARCH:return jsonify(sessions=[])
+    return jsonify(sessions=RESEARCH.sessions(g.participant))
+
+
+@app.post('/api/resume')
+def resume():
+    sid=(request.get_json() or {}).get('session_id')
+    sess = owned_session(sid)
+    if not sess and RESEARCH:sess=RESEARCH.historical_session(sid,g.participant)
+    if not sess:
+        return jsonify(error="Session not found"), 404
+    return jsonify(session_id=sess['session_id'], history=sess['history'],
+                   turn_count=sess['turn_count'], ended=sess['ended'],
+                   survey_result=sess.get('survey_result'),read_only=sess.get('read_only',False))
 
 
 @app.route("/api/start", methods=["POST"])
 def api_start():
-    data = request.json
-    sc   = next((s for s in SCENARIOS.values() if s["id"] == data.get("scenario_id")), None)
+    data = request.get_json() or {}
+    sc = resolve_scenario(data.get("scenario_id"))
     if not sc:
         return jsonify({"error": "Scenario not found"}), 404
 
+    if RESEARCH:
+        existing=RESEARCH.existing_session(g.participant)
+        if existing:
+            saved=RESEARCH.load(existing,g.participant)
+            if not saved['ended']:
+                return jsonify(session_id=existing,resumed=True)
+    research = RESEARCH.start(g.participant, data.get('scenario_id')) if RESEARCH else None
+    started_clock = time.monotonic()
     ts         = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
     session_id = f"HV_{sc['id']}_{ts}_{uuid.uuid4().hex[:6]}"
 
@@ -483,6 +687,7 @@ def api_start():
 
     # Agent goes first — now stage-aware
     history: list     = []
+    rag_cache = {}
     skill_seq: list   = []
     tracker = StageTracker()
     comfort_zone = sc.get("stage_profile", {}).get("comfort_zone")
@@ -493,8 +698,12 @@ def api_start():
     expected_stage = tracker.expected_stage()
     stage_before   = tracker.current_stage
 
+    suffix, rag_chunks, rag_fired = retrieve_for_session(sc, expected_stage, "", rag_cache, research)
+    if os.environ.get("RAG_LOG_STATUS") == "1":
+        print(f"[RAG] turn 1: triggered={rag_fired}; chunks={len(rag_chunks)}", flush=True)
     ar = agent_turn(SKILLS, sc, history, [], 1,
-                    stage_context=stage_context, expected_stage=expected_stage)
+                    stage_context=stage_context + suffix, expected_stage=expected_stage,
+                    **({'research': research} if research else {}))
     history.append({"role": "assistant", "content": ar["response"]})
     skill_seq.append(ar["skill_name"])
 
@@ -516,8 +725,12 @@ def api_start():
     except Exception:
         pass
 
-    SESSIONS[session_id] = {
+    new_session = {
+        "research": research,
         "session_id":  session_id,
+        "owner": g.participant,
+        "rag_cache": rag_cache,
+        "student_method": None,
         "scenario":    sc,
         "history":     history,
         "skill_seq":   skill_seq,
@@ -529,6 +742,7 @@ def api_start():
         "stage4_alts": stage4_alts,
     }
 
+    persist(new_session, turn_event(ar, tracker, stage_before, expected_stage, rag_chunks, rag_fired, time.monotonic()-started_clock))
     return jsonify({
         "session_id":   session_id,
         "agent_message": ar["response"],
@@ -545,14 +759,28 @@ def api_message():
     data       = request.json
     session_id = data.get("session_id")
     msg        = data.get("message", "").strip()
-    sess       = SESSIONS.get(session_id)
+    sess       = owned_session(session_id)
     if not sess: return jsonify({"error": "Session not found"}), 404
     if sess["ended"]: return jsonify({"error": "Session ended"}), 400
+    if sess["turn_count"] >= sess["scenario"]["max_turns"]:
+        return jsonify(error="Maximum turns reached. Please end the session and submit feedback."), 400
 
+    if not msg or len(msg) > 12000:
+        return jsonify(error="Enter a message of 1–12,000 characters."), 400
+    started_clock = time.monotonic()
+    sess = copy.deepcopy(sess)
+    tracker = sess["tracker"]
+    tracker.scan_student_parameters(tracker.current_stage, msg)
+    if tracker.current_stage == 2 and not sess['comfort_zone']:
+        low = msg.lower()
+        if 'qualitative' in low and 'quantitative' not in low: sess['comfort_zone'] = 'qualitative'
+        elif 'quantitative' in low and 'qualitative' not in low: sess['comfort_zone'] = 'quantitative'
+    tracker.advance_after_student_reply()
+    if not sess["student_method"] and tracker.current_stage <= 3:
+        sess["student_method"] = _detect_method(msg)
     sc      = sess["scenario"]
     history = sess["history"]
     history.append({"role": "user", "content": msg})
-    DB.log_turn(session_id, sess["turn_count"], "human", msg)
     sess["turn_count"] += 1
 
     if sess["turn_count"] > sc["max_turns"]:
@@ -561,11 +789,21 @@ def api_message():
                         "skill_used": None, "turn_count": sess["turn_count"],
                         "max_turns_reached": True})
 
+    expected_stage = tracker.expected_stage()
+    if sess.get('research') and expected_stage >= 4 and not sess['stage4_alts']:
+        from pedagogical_runtime import plan_alternatives
+        sess['stage4_alts'] = plan_alternatives(history, sess['student_method'], sess['comfort_zone'])
+    suffix, rag_chunks, rag_fired = retrieve_for_session(sc, expected_stage, msg, sess["rag_cache"], sess.get("research"))
+    if os.environ.get("RAG_LOG_STATUS") == "1":
+        print(f"[RAG] turn {sess['turn_count']}: triggered={rag_fired}; chunks={len(rag_chunks)}", flush=True)
     ar = agent_turn(SKILLS, sc, history, sess["skill_seq"], sess["turn_count"],
                     stage_context=tracker.build_stage_context(
                         comfort_zone=sess["comfort_zone"],
-                        stage4_alternatives=sess["stage4_alts"]),
-                    expected_stage=tracker.expected_stage())
+                        stage4_alternatives=sess["stage4_alts"],
+                        student_method=sess["student_method"]) + suffix,
+                    expected_stage=expected_stage,
+                    **({'research': sess['research']} if sess.get('research') else {}))
+    DB.log_turn(session_id, sess["turn_count"] - 1, "human", msg)
     history.append({"role": "assistant", "content": ar["response"]})
     sess["skill_seq"].append(ar["skill_name"])
 
@@ -581,7 +819,7 @@ def api_message():
     DB.log_skill_use(session_id, t_id, sess["turn_count"], ar["skill_name"], ar["reasoning"])
     try:
         DB.log_stage(session_id, t_id, sess["turn_count"], stage_now,
-                     declared=ar["declared_stage"], expected=tracker.current_stage,
+                     declared=ar["declared_stage"], expected=expected_stage,
                      stage_before=stage_before, stage_complete=ar["stage_complete"],
                      advanced=(stage_now > stage_before), forced=was_forced,
                      header_dropped=ar.get("stage_header_dropped", False),
@@ -593,6 +831,7 @@ def api_message():
     if ar["task_solved"]:
         sess["task_solved"] = True
 
+    persist(sess, turn_event(ar, tracker, stage_before, expected_stage, rag_chunks, rag_fired, time.monotonic()-started_clock))
     return jsonify({
         "agent_message":        ar["response"],
         "skill_used":           ar["skill_name"],
@@ -608,13 +847,40 @@ def api_message():
 
 @app.route("/api/end", methods=["POST"])
 def api_end():
-    data       = request.json
+    data = request.get_json(silent=True) or {}
     session_id = data.get("session_id")
-    sess       = SESSIONS.get(session_id)
-    if not sess: return jsonify({"error": "Session not found"}), 404
-    sess["task_solved"] = data.get("task_solved", False) or sess["task_solved"]
-    sess["ended"]       = True
-    return jsonify({"status": "ended", "task_solved": sess["task_solved"]})
+
+    sess = owned_session(session_id)
+
+    if not sess:
+        return jsonify({"error": "Session not found"}), 404
+
+    if sess["ended"]:
+        return jsonify({
+            "status": "ended",
+            "task_solved": sess["task_solved"],
+            "already_ended": True
+        })
+
+    sess = copy.deepcopy(sess)
+    sess["task_solved"] = (
+        data.get("task_solved", False) or sess["task_solved"]
+    )
+    sess["ended"] = True
+
+    persist(
+        sess,
+        {
+            "type": "end",
+            "task_solved": sess["task_solved"]
+        }
+    )
+
+    return jsonify({
+        "status": "ended",
+        "task_solved": sess["task_solved"],
+        "already_ended": False
+    })
 
 
 @app.route("/api/survey", methods=["POST"])
@@ -622,25 +888,39 @@ def api_survey():
     data       = request.json
     session_id = data.get("session_id")
     survey     = data.get("survey", {})
-    sess       = SESSIONS.get(session_id)
+    sess       = owned_session(session_id)
     if not sess: return jsonify({"error": "Session not found"}), 404
 
     sc          = sess["scenario"]
     turns_used  = sess["turn_count"]
     task_solved = sess["task_solved"]
 
+    if sess.get("survey_result"):
+        return jsonify(sess["survey_result"])
+    if not sess["ended"]:
+        return jsonify(error="End the conversation before submitting feedback."), 400
+    if not isinstance(survey, dict) or any(
+        not isinstance(survey.get(f"Q{i}"), dict) or type(survey[f"Q{i}"].get("score")) is not int
+        or not 1 <= survey[f"Q{i}"]["score"] <= 5 for i in range(1, 6)
+    ):
+        return jsonify(error="Rate all five questions from 1 to 5."), 400
     DB.log_survey(session_id, survey, respondent_type="human")
-    reward = calculate_reward(task_solved, survey, turns_used, sc["max_turns"])
+    reward = calculate_reward(task_solved, survey, turns_used, sc["max_turns"], stage_summary=sess["tracker"].summary())
     DB.log_reward(session_id, reward)
     DB.complete_session(session_id, task_solved, turns_used)
 
-    return jsonify({
+    result = {
         "run_id":       session_id,
         "reward":       reward,
         "reward_band":  reward["reward_band"],
         "task_solved":  task_solved,
         "turns_used":   turns_used,
-    })
+    }
+    sess = copy.deepcopy(sess)
+    sess["survey_result"] = result
+    sess["survey"] = survey
+    persist(sess, {"type":"survey", "survey":survey, "reward":reward})
+    return jsonify(result)
 
 
 @app.route("/api/results")

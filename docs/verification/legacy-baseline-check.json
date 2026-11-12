@@ -1,0 +1,7 @@
+{
+  "tests_run": 15,
+  "failures": 2,
+  "errors": 6,
+  "baseline_revision": "dd27bb669cb70a5237b747a498af18676643fb64",
+  "note": "Pre-JSON-protocol fixtures tested against unchanged deployed baseline; superseded by current protocol suite."
+}

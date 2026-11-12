@@ -1,0 +1,58 @@
+{
+  "baseline_revision": "dd27bb669cb70a5237b747a498af18676643fb64",
+  "proposed_version": "selftest-2026-11-07-reliability-v12",
+  "activated": true,
+  "files": [
+    {
+      "path": "agent.py",
+      "sha256": "1b78dfd3e71d195ed328d3170e6f1419b253723c04e283229288b57dfc159aba",
+      "new": false
+    },
+    {
+      "path": "app.py",
+      "sha256": "f0da73bb19674877b9e8bb87b6a357fb08d022c0b9335424dfbca6f3cf3b6baa",
+      "new": false
+    },
+    {
+      "path": "failure_records.py",
+      "sha256": "0d7720fd2ac06c1bae2e9edd0cb652a6f5b7667982a644079aa32d7906f2eac1",
+      "new": true
+    },
+    {
+      "path": "human_validation_server.py",
+      "sha256": "8db3cecef185766e43629a569ccb8799ed2bcf23b58b7bc7ebada1d77866cab1",
+      "new": false
+    },
+    {
+      "path": "pedagogical_runtime.py",
+      "sha256": "aafd3259c0f55c6e61299ceddc0e95a5324f029cf2fd5c8f22159410ae8ae804",
+      "new": false
+    },
+    {
+      "path": "reply_flow.py",
+      "sha256": "cdb5b9388470360cf16f384efb5807f63666fcea5dc1d61cbcde571e70171437",
+      "new": true
+    },
+    {
+      "path": "space_bridge.py",
+      "sha256": "b9c248bc86c61c31d2778b83e60602a92218002af66f65ada18b88a72491d4e9",
+      "new": false
+    },
+    {
+      "path": "sqlserver_store.py",
+      "sha256": "f25dc84d65b7ad94c36a13571f5d919ec1e5cf4838e480c9d4fda31481159242",
+      "new": false
+    },
+    {
+      "path": "stage_tracker.py",
+      "sha256": "f8a4a2cda1ce6620dc5ed80de9e72923c14b9689b04776f4c1c1c107c8a5f95b",
+      "new": false
+    },
+    {
+      "path": "tutor_actions.py",
+      "sha256": "4edc8a2ece9c55c7d6b45a4d4cdb1d914fe03ab86a5d6982ed610ebd60338d5f",
+      "new": false
+    }
+  ],
+  "activated_revision": "eb19f08e75f31e417a6581c36e2b1844c2b860da"
+}

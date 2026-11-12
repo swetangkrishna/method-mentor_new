@@ -1,5 +1,5 @@
 """
-human_validation_cli.py — Terminal version of the human-validation tool.
+human_validation.py — Terminal version of the human-validation tool.
 
 The HUMAN plays the student; the agent ("Aoife") plays the teacher. This is the
 terminal counterpart to human_validation_server.py — no Flask, no web front end,
@@ -13,10 +13,10 @@ is OPTIONAL — if the DB is read-only (e.g. created under another account), it
 warns once and continues in memory so nothing blocks the session.
 
 Usage:
-    python human_validation_cli.py                 # pick a scenario interactively
-    python human_validation_cli.py --scenario S01  # start a scenario directly
-    python human_validation_cli.py --freeform      # new student, no preset scenario
-    python human_validation_cli.py --no-db         # skip all DB logging
+    python human_validation.py                 # pick a scenario interactively
+    python human_validation.py --scenario S01  # start a scenario directly
+    python human_validation.py --freeform      # new student, no preset scenario
+    python human_validation.py --no-db         # skip all DB logging
 
 In-conversation commands:
     /solved   mark that the agent helped you reach a decision (sets task_solved)
@@ -508,7 +508,7 @@ def _run_survey(sc, db, session_id, turns_used, task_solved, tracker, record=Non
     reward = None
     if _HAS_REWARD:
         try:
-            reward = calculate_reward(task_solved, survey, turns_used, sc["max_turns"])
+            reward = calculate_reward(task_solved, survey, turns_used, sc["max_turns"], stage_summary=tracker.summary())
             db.log_reward(session_id, reward)
         except Exception:
             reward = None

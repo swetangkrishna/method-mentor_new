@@ -1,0 +1,6 @@
+-r deploy/requirements-v12.txt
+# Installed by the managed Space at runtime, but needed in a local environment.
+gradio==6.28.0
+gradio_client==2.7.1
+huggingface_hub>=1,<2
+certifi>=2024.2.2

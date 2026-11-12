@@ -101,8 +101,7 @@ STAGES: Dict[int, Dict] = {
         ),
         "required_parameters": [
             {"id": "programme_level",
-             "question": ("What programme are you on — Masters or PhD, full-time or "
-                          "part-time — and what year are you in?"),
+             "question": "What is your current programme of study (degree, study mode and year)?",
              "detect": ["phd", "masters", "master's", "msc", "ma ", "doctoral",
                         "full time", "full-time", "part time", "part-time",
                         "first year", "second year", "third year", "year "]},

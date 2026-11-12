@@ -156,9 +156,9 @@ class StageTracker:
                                      "to", "for", "in", "on")]
             # A method counts as 'presented' if its first salient keyword appears.
             head = keywords[0] if keywords else method.lower()
-            if head and head in low:
+            if head and (head in low or self._methods_match(method, response_text)):
                 self.stage4_methods_seen.add(method)
-        if len(self.stage4_methods_seen) >= 2:
+        if stage4_alternatives and all(a["method"] in self.stage4_methods_seen for a in stage4_alternatives):
             self.stage4_alternatives_presented = True
 
     def stage4_content_satisfied(self) -> bool:
@@ -715,10 +715,15 @@ class StageTracker:
             )
         if cur["number"] == 6:
             lines.append(
-                "REMINDER: Invite the student to summarise THEIR OWN choice and "
-                "reasoning in their own words — do not summarise it for them, and do "
-                "not tell them whether their choice is correct. Then encourage them "
-                "to take this reasoning to their supervisor. Ask ONE question."
+                "REMINDER: First address the learner's latest unresolved reasoning or "
+                "methodological concern with ONE focused reflective question. Being in "
+                "Stage 6 does not mean their uncertainty is resolved. Do not demand a "
+                "summary or supervisor discussion instead of addressing that concern. "
+                "Invite their OWN reasoned choice and next action only when they are "
+                "ready and that invitation has not already been made. Once they have "
+                "provided their rationale, do not ask them to repeat it. Do not endorse "
+                "a method or summarise their reasoning for them. If they explicitly "
+                "finish, acknowledge the closing without reopening the conversation."
             )
 
         # Advancement instruction + output contract for the stage headers.
