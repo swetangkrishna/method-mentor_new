@@ -21,6 +21,7 @@ Public API:
 import json
 import os
 import re
+import sys
 from typing import List, Dict, Optional
 
 import rag_config as C
@@ -60,7 +61,8 @@ def _ensure_loaded() -> bool:
         return True
     try:
         if _MODEL is None:
-            _MODEL = SentenceTransformer(C.RAG_EMBED_MODEL)
+            device = os.environ.get("RAG_EMBED_DEVICE")
+            _MODEL = SentenceTransformer(C.RAG_EMBED_MODEL, **({"device": device} if device else {}))
         if _INDEX is None:
             if not os.path.exists(C.RAG_INDEX_FILE):
                 _LOAD_ERROR = f"index file missing: {C.RAG_INDEX_FILE}"
@@ -138,6 +140,10 @@ def retrieve(query: str, k: Optional[int] = None,
 
     try:
         q_emb = _MODEL.encode([query], convert_to_numpy=True)
+        # This macOS environment segfaults in multi-threaded FAISS search after
+        # PyTorch encoding. Set this on the calling thread (also for web workers).
+        if sys.platform == "darwin":
+            faiss.omp_set_num_threads(1)
         distances, indices = _INDEX.search(q_emb, k)
         out: List[Dict] = []
         for dist, idx in zip(distances[0], indices[0]):

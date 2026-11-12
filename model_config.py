@@ -1,7 +1,8 @@
 """
 model_config.py
 
-Switch backend with ONE line — change BACKEND below.
+Azure Foundry is the default. Override with LLM_BACKEND; use vllm for fallback.
+Environment variables are read at call time. Shell exports are required; .env is not auto-loaded.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OPTION 1 — HuggingFace Inference API  (free, no GPU needed)
@@ -55,17 +56,9 @@ VLLM_API_KEY  = "EMPTY"                     # vLLM ignores the key but the clien
 AZURE_FOUNDRY_MODEL = "llama70b"
 
 # Example:
-# https://method-mentor-foundry-29107.services.ai.azure.com/openai/v1
-AZURE_FOUNDRY_ENDPOINT = os.environ.get(
-    "AZURE_FOUNDRY_ENDPOINT",
-    ""
-)
-
-# NEVER hard-code the key here.
-AZURE_FOUNDRY_API_KEY = os.environ.get(
-    "AZURE_FOUNDRY_KEY",
-    ""
-)
+# https://YOUR-RESOURCE.services.ai.azure.com/openai/v1
+AZURE_FOUNDRY_ENDPOINT = ""  # resolved from the environment by get_config()
+AZURE_FOUNDRY_API_KEY = ""   # never store credentials in source
 
 AZURE_FOUNDRY_TIMEOUT = 300
 # ── HuggingFace ──────────────────────────────────────────────────────────────
@@ -103,49 +96,61 @@ SCORER_MODEL  = None
 
 def get_config(role: str = "default") -> dict:
     """Resolve full config dict for a given role."""
-    backend = os.environ.get("LLM_BACKEND", BACKEND)
+    backend = os.environ.get("LLM_BACKEND", BACKEND).strip().lower()
     if backend == "azure_foundry":
-      model = os.environ.get(
-          "AZURE_FOUNDRY_MODEL",
-          AZURE_FOUNDRY_MODEL
-      )
-  
-      overrides = {
-          "agent": AGENT_MODEL,
-          "persona": PERSONA_MODEL,
-          "scorer": SCORER_MODEL,
-      }
-  
-      model = overrides.get(role) or model
-  
-      endpoint = os.environ.get(
-          "AZURE_FOUNDRY_ENDPOINT",
-          AZURE_FOUNDRY_ENDPOINT
-      ).rstrip("/")
-  
-      api_key = os.environ.get(
-          "AZURE_FOUNDRY_KEY",
-          AZURE_FOUNDRY_API_KEY
-      )
-  
-      if not endpoint:
-          raise RuntimeError(
-              "AZURE_FOUNDRY_ENDPOINT is not set."
-          )
-  
-      if not api_key:
-          raise RuntimeError(
-              "AZURE_FOUNDRY_KEY is not set."
-          )
-  
-      return {
-          "backend": "azure_foundry",
-          "model": model,
-          "endpoint": endpoint,
-          "api_key": api_key,
-          "timeout": AZURE_FOUNDRY_TIMEOUT,
-      }
-  
+        model = os.environ.get(
+            "AZURE_FOUNDRY_MODEL",
+            AZURE_FOUNDRY_MODEL
+        )
+
+        overrides = {
+            "agent": AGENT_MODEL,
+            "persona": PERSONA_MODEL,
+            "scorer": SCORER_MODEL,
+        }
+
+        model = overrides.get(role) or model
+
+        endpoint = os.environ.get(
+            "AZURE_FOUNDRY_ENDPOINT",
+            AZURE_FOUNDRY_ENDPOINT
+        ).rstrip("/")
+
+        api_key = os.environ.get(
+            "AZURE_FOUNDRY_KEY",
+            AZURE_FOUNDRY_API_KEY
+        )
+
+        if not endpoint:
+            raise RuntimeError(
+                "AZURE_FOUNDRY_ENDPOINT is not set."
+            )
+
+        if not api_key:
+            raise RuntimeError(
+                "AZURE_FOUNDRY_KEY is not set."
+            )
+
+        from urllib.parse import urlsplit
+        parsed = urlsplit(endpoint)
+        if (parsed.scheme != "https" or not parsed.hostname or parsed.username
+                or parsed.password or parsed.query or parsed.fragment
+                or parsed.path != "/openai/v1"):
+            raise ValueError("AZURE_FOUNDRY_ENDPOINT must be https://<host>/openai/v1")
+        if not model.strip():
+            raise ValueError("AZURE_FOUNDRY_MODEL must name a deployment.")
+        request_profile = os.environ.get("AZURE_FOUNDRY_REQUEST_PROFILE", "classic").strip().lower()
+        if request_profile not in ("classic", "reasoning"):
+            raise ValueError("AZURE_FOUNDRY_REQUEST_PROFILE must be classic or reasoning")
+        return {
+            "request_profile": request_profile,
+            "backend": "azure_foundry",
+            "model": model,
+            "endpoint": endpoint,
+            "api_key": api_key,
+            "timeout": AZURE_FOUNDRY_TIMEOUT,
+        }
+
     elif backend == "vllm":
         model = os.environ.get("VLLM_MODEL", VLLM_MODEL)
         overrides = {"agent": AGENT_MODEL, "persona": PERSONA_MODEL, "scorer": SCORER_MODEL}
@@ -186,12 +191,13 @@ def get_config(role: str = "default") -> dict:
             "timeout": OLLAMA_TIMEOUT,
         }
 
-    else:  # anthropic
+    elif backend == "anthropic":
         return {
             "backend": "anthropic",
             "model": os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514"),
         }
 
+    raise ValueError(f"Unknown LLM_BACKEND: {backend}")
 
 def print_config():
     cfg = get_config()
@@ -200,15 +206,15 @@ def print_config():
     print(f"│  Backend : {b}")
     print(f"│  Model   : {cfg.get('model_display', cfg['model'])}")
     if b == "azure_foundry":
-      print(f"│  Endpoint: {cfg['endpoint']}")
-      print(f"│  Timeout : {cfg['timeout']}s")
+        print(f"│  Endpoint: {cfg['endpoint']}")
+        print(f"│  Timeout : {cfg['timeout']}s")
 
     elif b == "vllm":
         print(f"│  Host    : {cfg['vllm_host']}")
         print(f"│  Context : {cfg['context_length']} tokens  |  Timeout: {cfg['timeout']}s")
     elif b == "huggingface":
         tok = cfg.get("hf_token", "")
-        print(f"│  HF Token: {tok[:8]}..." if tok else "│  HF Token: ⚠ NOT SET — export HF_TOKEN=hf_...")
+        print("│  HF Token: configured" if tok else "│  HF Token: ⚠ NOT SET — export HF_TOKEN=hf_...")
         print(f"│  Timeout : {cfg['timeout']}s  |  Retries: {cfg['hf_max_retries']}")
     elif b == "ollama":
         print(f"│  Host    : {cfg['ollama_host']}")

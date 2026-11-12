@@ -10,6 +10,7 @@ Run diagnostic:  python api_client.py --diagnose
 """
 
 import json
+import re
 import os
 import socket
 import ssl
@@ -338,6 +339,107 @@ def check_ollama_running() -> dict:
         return {"running": False, "models": [], "error": str(e)}
 # ── Azure AI Foundry ─────────────────────────────────────────────────────────
 
+class AzureBackendError(RuntimeError):
+    """Safe machine-readable diagnostics; never includes response bodies or keys."""
+    def __init__(self, category, status=None, diagnostics=None):
+        self.category=category
+        self.status=status
+        self.diagnostics=diagnostics or {}
+        super().__init__('Azure request failed: '+category)
+
+
+def _filter_diagnostics(body, phase):
+    """Retain only documented filter labels; never provider text or prompts."""
+    categories = {'hate', 'sexual', 'violence', 'self_harm', 'jailbreak',
+                  'indirect_attack', 'protected_material_text', 'protected_material_code',
+                  'custom_blocklists', 'profanity', 'pii', 'groundedness'}
+    filters = []
+    def walk(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in categories and isinstance(item, dict):
+                    safe = {'category': key}
+                    for flag in ('filtered', 'detected', 'blocked'):
+                        if type(item.get(flag)) is bool:
+                            safe[flag] = item[flag]
+                    if item.get('severity') in ('safe', 'low', 'medium', 'high'):
+                        safe['severity'] = item['severity']
+                    if len(safe) > 1 and safe not in filters:
+                        filters.append(safe)
+                elif isinstance(item, (dict, list)):
+                    walk(item)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item)
+    walk(body)
+    # Foundry's Meta deployment can return labels inside a fixed error message
+    # instead of structured category annotations. Extract only known labels.
+    labels = {'Jailbreak': 'jailbreak', 'Hate': 'hate', 'Sexual': 'sexual',
+              'Violence': 'violence', 'SelfHarm': 'self_harm', 'Self-harm': 'self_harm'}
+    def labelled_errors(value):
+        if isinstance(value, dict):
+            error = value.get('error')
+            if isinstance(error, dict) and error.get('code') == 'content_filter':
+                match = re.fullmatch(r"Response content blocked by label '([^']+)'\.", str(error.get('message', '')))
+                if match and match.group(1) in labels:
+                    item = {'category': labels[match.group(1)], 'filtered': True}
+                    if item not in filters:
+                        filters.append(item)
+            for item in value.values():
+                if isinstance(item, (dict, list)):
+                    labelled_errors(item)
+        elif isinstance(value, list):
+            for item in value:
+                labelled_errors(item)
+    labelled_errors(body)
+    return {'phase': phase, 'filters': filters}
+
+
+def _filter_error(body, phase, status=None):
+    diagnostic = _filter_diagnostics(body, phase)
+    print('AZURE_FILTER_DIAGNOSTIC ' + json.dumps(diagnostic, sort_keys=True), flush=True)
+    return AzureBackendError('content_filter', status, diagnostic)
+
+
+def _tutor_json_to_protocol(content):
+    """Validate model-generated fields and decode their transport representation."""
+    fields = ('SKILL', 'TUTOR_MOVE', 'REASONING', 'STAGE',
+              'STAGE_COMPLETE', 'TASK_SOLVED', 'RESPONSE')
+    def unique_pairs(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError('Duplicate tutor protocol field')
+            result[key] = value
+        return result
+    data = json.loads(content, object_pairs_hook=unique_pairs)
+    if not isinstance(data, dict) or set(data) != set(fields):
+        raise ValueError('Incomplete tutor protocol')
+    for field in ('SKILL', 'TUTOR_MOVE'):
+        if not isinstance(data[field], str) or not re.fullmatch(r'[a-z][a-z0-9_-]*', data[field]):
+            raise ValueError('Invalid tutor action field')
+    stage = data['STAGE']
+    if not ((type(stage) is int and 1 <= stage <= 6) or
+            (isinstance(stage, str) and re.fullmatch(r'[1-6]', stage))):
+        raise ValueError('Invalid tutor stage')
+    for field in ('STAGE_COMPLETE', 'TASK_SOLVED'):
+        if data[field] not in ('YES', 'NO'):
+            raise ValueError('Invalid tutor completion field')
+    if not isinstance(data['REASONING'], str) or not data['REASONING'].strip() or '\n' in data['REASONING'] or '\r' in data['REASONING']:
+        raise ValueError('Invalid tutor reasoning field')
+    if not isinstance(data['RESPONSE'], str) or not data['RESPONSE'].strip():
+        raise ValueError('Empty tutor response')
+    if re.search(r'(?im)^\s*(?:SKILL|TUTOR_MOVE|REASONING|STAGE|STAGE_COMPLETE|TASK_SOLVED|RESPONSE)\s*:', data['RESPONSE']):
+        raise ValueError('Tutor metadata cannot appear inside the response body')
+    # The policy/action and quality checks in agent_turn still validate these
+    # generated values. Never fill missing fields from the requested action.
+    return '\n'.join(field + ': ' + str(data[field]) for field in fields)
+
+
+class PrefillContractError(RuntimeError):
+    """A generated response did not preserve the requested semantic prefix."""
+
+
 def _call_azure_foundry(
     messages: List[Dict],
     system: str,
@@ -355,55 +457,124 @@ def _call_azure_foundry(
     endpoint = cfg["endpoint"].rstrip("/")
     api_key = cfg["api_key"]
 
+    tutor_json = prefill == 'SKILL: '
+    if tutor_json:
+        system += (
+            '\n\nTransport encoding for this response: Return a single JSON object '
+            'containing exactly these seven fields representing the tutor protocol '
+            'defined above: SKILL (string), TUTOR_MOVE (string), REASONING (one-line '
+            'string), STAGE (one digit from 1 to 6 as a string), STAGE_COMPLETE (string YES or NO), '
+            'TASK_SOLVED (string YES or NO), RESPONSE (learner-facing string). '
+            'Generate every field. The application displays only RESPONSE. Use '
+            'JSON without Markdown fences or any text outside the object.'
+        )
+    elif prefill:
+        # Foundry has no native assistant-continuation control. Make the prefix
+        # part of generation, including fixed metadata and student sentence stems.
+        system += (
+            "\n\nOutput format: write the complete assistant response, including the "
+            "required opening text below exactly once. Continue with the remaining "
+            "response fields and learner-facing text described above. If the opening "
+            "ends mid-sentence, complete that sentence. Return plain text without "
+            "Markdown fences or a preamble."
+            "\nRequired opening text (JSON string): " + json.dumps(prefill)
+        )
     msgs = _with_system(messages, system)
 
+    reasoning_profile = cfg.get("request_profile", "classic") == "reasoning"
+    token_limit_field = "max_completion_tokens" if reasoning_profile else "max_tokens"
     payload = {
         "model": cfg["model"],
         "messages": msgs,
-        "max_tokens": max_tokens,
-        "temperature": temperature,
+        token_limit_field: max(1600, max_tokens) if reasoning_profile else max_tokens,
         "stream": False,
     }
+    if not reasoning_profile:
+        payload["temperature"] = temperature
 
     headers = {
         "Content-Type": "application/json",
         "api-key": api_key,
     }
 
-    try:
-        body = _post_urllib(
-            f"{endpoint}/chat/completions",
-            payload,
-            headers,
-            timeout=cfg.get("timeout", 300),
-        )
+    if tutor_json:
+        payload['response_format'] = {'type': 'json_object'}
 
-        content = body["choices"][0]["message"]["content"]
-
-        # Azure does not expose vLLM's continue_final_message behaviour.
-        # For now preserve the downstream contract when a prefill exists.
-        if prefill:
-            if content.startswith(prefill):
-                return content
-            return prefill + content
-
-        return content
-
-    except urllib.error.HTTPError as e:
-        detail = e.read().decode(
-            "utf-8",
-            errors="replace"
-        )
-
-        raise RuntimeError(
-            f"Azure Foundry API error {e.code}: {detail[:1000]}"
-        )
-
-    except Exception as e:
-        raise RuntimeError(
-            f"Azure Foundry request failed at {endpoint}.\n"
-            f"Detail: {e}"
-        )
+    protocol_failures = 0
+    prefix_failures=0
+    length_retried=False
+    for attempt in range(3):
+        try:
+            body = _post_urllib(f"{endpoint}/chat/completions",payload,headers,timeout=cfg.get("timeout",300))
+        except urllib.error.HTTPError as e:
+            if e.code == 400:
+                # Recognise provider safety refusals without exposing raw bodies.
+                try:
+                    failure = json.loads(e.read(65536))
+                    blocked = (isinstance(failure, dict) and (
+                        any(isinstance(c, dict) and c.get('finish_reason') == 'content_filter'
+                            for c in (failure.get('choices') or [])) or
+                        (isinstance(failure.get('error'), dict) and
+                         failure['error'].get('code') == 'content_filter')))
+                except (ValueError, TypeError, AttributeError):
+                    blocked = False
+                if blocked:
+                    raise _filter_error(failure, 'request', 400) from None
+            if e.code in (429,500,502,503,504) and attempt<2:
+                try:delay=float(e.headers.get('Retry-After',1+attempt))
+                except (ValueError,TypeError,AttributeError):delay=1+attempt
+                # Honor the provider's short token-quota reset instead of
+                # immediately failing a safely retryable tutoring request.
+                wait_limit = 60 if e.code == 429 else 10
+                if 0<=delay<=wait_limit:
+                    time.sleep(delay)
+                    continue
+            raise AzureBackendError('http_'+str(e.code),e.code) from None
+        except (urllib.error.URLError,TimeoutError,ConnectionError):
+            if attempt<2:
+                time.sleep(1+attempt)
+                continue
+            raise AzureBackendError('transport') from None
+        try:
+            choice=body['choices'][0]
+            content=choice['message']['content']
+        except (KeyError,IndexError,TypeError):
+            raise AzureBackendError('invalid_response') from None
+        if choice.get('finish_reason')=='content_filter':
+            raise _filter_error(body, 'completion')
+        if choice.get('finish_reason')=='length':
+            # Retry a complete answer once; never accept truncated metadata/body.
+            if not length_retried and attempt<2 and payload[token_limit_field]<4096:
+                payload[token_limit_field]=min(4096,payload[token_limit_field]*2)
+                length_retried=True
+                continue
+            raise AzureBackendError('truncated')
+        if not isinstance(content,str) or not content.strip():
+            raise AzureBackendError('empty_response')
+        if tutor_json:
+            try:
+                return _tutor_json_to_protocol(content)
+            except (ValueError, TypeError):
+                protocol_failures += 1
+                if protocol_failures >= 2 or attempt == 2:
+                    raise AzureBackendError('invalid_protocol') from None
+                payload['messages'] = _with_system(messages, system +
+                    '\nReturn a JSON object with all seven required fields and the specified types. '
+                    'Use YES or NO strings for the completion fields. No field may be omitted.')
+                if not reasoning_profile:
+                    payload['temperature'] = 0.0
+                continue
+        if not prefill or content.startswith(prefill):return content
+        prefix_failures+=1
+        if prefix_failures>=2 or attempt==2:
+            raise PrefillContractError('Azure did not preserve the required response prefix after bounded attempts.')
+        payload['messages']=_with_system(messages,system+(
+            '\nYour previous attempt did not reproduce the required prefix. '
+            'Copy that prefix EXACTLY, including all header values and spaces, '
+            'then continue. Do not rewrite or summarize any prefix text.'))
+        if not reasoning_profile:
+            payload['temperature']=0.0
+    raise AzureBackendError('retry_exhausted')
 
 # ── vLLM (OpenAI-compatible local server on the cluster) ──────────────────────
 
@@ -538,56 +709,16 @@ def call_llm(messages: List[Dict], system: str = "", max_tokens: int = 1024,
     cfg = get_config(role)
     b   = cfg["backend"]
     if b == "azure_foundry":
-    return _call_azure_foundry(
-        messages,
-        system,
-        max_tokens,
-        temperature,
-        cfg,
-        prefill=prefill,
-    )
-
-elif b == "vllm":
-    return _call_vllm(
-        messages,
-        system,
-        max_tokens,
-        temperature,
-        cfg,
-        prefill=prefill,
-    )
-
-elif b == "huggingface":
-    return _call_hf(
-        messages,
-        system,
-        max_tokens,
-        temperature,
-        cfg,
-    )
-
-elif b == "ollama":
-    return _call_ollama(
-        messages,
-        system,
-        max_tokens,
-        temperature,
-        cfg,
-        prefill=prefill,
-    )
-
-elif b == "anthropic":
-    return _call_anthropic(
-        messages,
-        system,
-        max_tokens,
-        temperature,
-    )
-
-else:
-    raise ValueError(
-        f"Unknown backend '{b}'."
-    )
+        return _call_azure_foundry(messages, system, max_tokens, temperature, cfg, prefill)
+    elif b == "vllm":
+        return _call_vllm(messages, system, max_tokens, temperature, cfg, prefill)
+    elif b == "ollama":
+        return _call_ollama(messages, system, max_tokens, temperature, cfg, prefill)
+    elif b == "huggingface":
+        return _call_hf(messages, system, max_tokens, temperature, cfg)
+    elif b == "anthropic":
+        return _call_anthropic(messages, system, max_tokens, temperature)
+    raise ValueError(f"Unknown backend '{b}'.")
 
 
 def call_llm_precise(messages: List[Dict], system: str = "",

@@ -17,3 +17,29 @@ vllm_server_*.log
 rag_cache/faiss.index
 rag_cache/chunks.jsonl
 rag_cache/meta.json
+
+# Private runtime and research artifacts
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
+*.log
+*.err
+*.out
+private/
+deployment-private/
+participants*.json
+web_sessions/
+human_validation_results/
+rag_cache/
+*.zip
+
+# Operator-specific reference manifest
+/rag_assets.json

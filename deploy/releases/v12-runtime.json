@@ -1,0 +1,242 @@
+{
+  "version": "selftest-2026-11-07-reliability-v12",
+  "hosted_revision": "eb19f08e75f31e417a6581c36e2b1844c2b860da",
+  "files": [
+    {
+      "path": "README.md",
+      "source": "deploy/space-README.md",
+      "sha256": "5f63e15a6eb507a9b7dcdd8b7b3fc703460e6e8be02ff657e7a8c1cab11dc879"
+    },
+    {
+      "path": "agent.py",
+      "source": "agent.py",
+      "sha256": "1b78dfd3e71d195ed328d3170e6f1419b253723c04e283229288b57dfc159aba"
+    },
+    {
+      "path": "api_client.py",
+      "source": "api_client.py",
+      "sha256": "026764f08a58f74b4a0791f65d51b1c892a65c18af1da36934c6974f92dd604e"
+    },
+    {
+      "path": "app.py",
+      "source": "app.py",
+      "sha256": "f0da73bb19674877b9e8bb87b6a357fb08d022c0b9335424dfbca6f3cf3b6baa"
+    },
+    {
+      "path": "database.py",
+      "source": "database.py",
+      "sha256": "1b7d22effe1a4c5f3d66328d7d575f5f4d46499d49ade6546e2a95437f606a39"
+    },
+    {
+      "path": "failure_records.py",
+      "source": "failure_records.py",
+      "sha256": "0d7720fd2ac06c1bae2e9edd0cb652a6f5b7667982a644079aa32d7906f2eac1"
+    },
+    {
+      "path": "human_validation.py",
+      "source": "human_validation.py",
+      "sha256": "d60dd810c168097e3d6a03b6b90223e53885119cc295dddf155e61da1440d0b4"
+    },
+    {
+      "path": "human_validation_server.py",
+      "source": "human_validation_server.py",
+      "sha256": "8db3cecef185766e43629a569ccb8799ed2bcf23b58b7bc7ebada1d77866cab1"
+    },
+    {
+      "path": "manage_participants.py",
+      "source": "manage_participants.py",
+      "sha256": "dea0aa8036c9bfcc845f6de7008cb66e0aa6ec34bf16bde37b3fc64fb4cbca5a"
+    },
+    {
+      "path": "model_config.py",
+      "source": "model_config.py",
+      "sha256": "44de93aa9279c669143fb7193046484e5bc592b2c5b2ee01cc3af351fc20fa87"
+    },
+    {
+      "path": "pedagogical_runtime.py",
+      "source": "pedagogical_runtime.py",
+      "sha256": "aafd3259c0f55c6e61299ceddc0e95a5324f029cf2fd5c8f22159410ae8ae804"
+    },
+    {
+      "path": "rag_assets.json",
+      "source": "config/rag-assets.example.json",
+      "sha256": "173f15a23ef8c755ddd8395164eb8af4098e615cfe621a28d27a0780d08aa42a"
+    },
+    {
+      "path": "rag_config.py",
+      "source": "rag_config.py",
+      "sha256": "534eb9d0860ad2433b67270c456dc3dbb8a553c6868457e38f3b4f5910764135"
+    },
+    {
+      "path": "reply_flow.py",
+      "source": "reply_flow.py",
+      "sha256": "cdb5b9388470360cf16f384efb5807f63666fcea5dc1d61cbcde571e70171437"
+    },
+    {
+      "path": "requirements.txt",
+      "source": "deploy/requirements-v12.txt",
+      "sha256": "45e400cd265ec2953320dc34f10768f77461b960db1f46ddaef5dfb209323b66"
+    },
+    {
+      "path": "research_runtime.py",
+      "source": "research_runtime.py",
+      "sha256": "2f61d66a2259972f828b88b2c6f7098fbca44d30d9f8ca29248b1fa228937053"
+    },
+    {
+      "path": "research_store.py",
+      "source": "research_store.py",
+      "sha256": "177d035804af27d44f23712ecd9cae583a31916933b1640450289b18363474aa"
+    },
+    {
+      "path": "retrieval.py",
+      "source": "retrieval.py",
+      "sha256": "6b0a7519978220402cfe8dd147e1b80a3e8c7f285404a93a018c447f1662528d"
+    },
+    {
+      "path": "reward.py",
+      "source": "reward.py",
+      "sha256": "9994c0ea28d17543e77c9996b2c4f73894553330f1a557018c725b01f3498312"
+    },
+    {
+      "path": "scenarios.py",
+      "source": "scenarios.py",
+      "sha256": "860f86211d772d60dcae9b71dc5c8ef987b7908e3f0f3d5b9dde0ebdbb971eba"
+    },
+    {
+      "path": "skill_loader.py",
+      "source": "skill_loader.py",
+      "sha256": "b1fbcd88d0ca5bd6c6506c31762f57d83463f6899d9877a570b6de59b69f286e"
+    },
+    {
+      "path": "skills_M1/align-outcomes-activities-assessment_SKILL.md",
+      "source": "skills_M1/align-outcomes-activities-assessment_SKILL.md",
+      "sha256": "f7b39ff2d0f1611021d091c7ee18963e36abb0b53c46d44bdfaae199e01c9d65"
+    },
+    {
+      "path": "skills_M1/assign-stretch-tasks_SKILL.md",
+      "source": "skills_M1/assign-stretch-tasks_SKILL.md",
+      "sha256": "5f38809f6a44fa1aaefe472698e7bc37caf4c53ec4ea143d54bc00e1369c385c"
+    },
+    {
+      "path": "skills_M1/challenge-assumptions_SKILL.md",
+      "source": "skills_M1/challenge-assumptions_SKILL.md",
+      "sha256": "c3b19b7b276f845ec53d3f3d156509403d135290c39b344b82135781d1a41930"
+    },
+    {
+      "path": "skills_M1/confirm-competence_SKILL.md",
+      "source": "skills_M1/confirm-competence_SKILL.md",
+      "sha256": "e3c9bbf356233bfce61d6a15554c173f3430a57a329359425dbac314e17fafff"
+    },
+    {
+      "path": "skills_M1/design-learning-experience_SKILL.md",
+      "source": "skills_M1/design-learning-experience_SKILL.md",
+      "sha256": "d823c1aad092459e0d86dbde56be773a881ecd88de84d46d594c7e4343b5a60a"
+    },
+    {
+      "path": "skills_M1/diagnose-zpd_SKILL.md",
+      "source": "skills_M1/diagnose-zpd_SKILL.md",
+      "sha256": "5df253c6f7801fcb723522f4edb6605949f56a800fc4a91787030a4991bfa755"
+    },
+    {
+      "path": "skills_M1/encourage-metacognition_SKILL.md",
+      "source": "skills_M1/encourage-metacognition_SKILL.md",
+      "sha256": "5f636e84abf4f209b07435aef35467a704953463e664da266cb255af4b55e920"
+    },
+    {
+      "path": "skills_M1/facilitate-discussion_SKILL.md",
+      "source": "skills_M1/facilitate-discussion_SKILL.md",
+      "sha256": "2f59e9ea91f4e784148bc5d815fd98172846f55d0a1ed2d056827e345d5295b0"
+    },
+    {
+      "path": "skills_M1/identify-misconceptions_SKILL.md",
+      "source": "skills_M1/identify-misconceptions_SKILL.md",
+      "sha256": "1e4d92657dd7f6d0be8bc42e571018a9fd029308bdf7c8721324e859a302a468"
+    },
+    {
+      "path": "skills_M1/probe-intended-decisions_SKILL.md",
+      "source": "skills_M1/probe-intended-decisions_SKILL.md",
+      "sha256": "489c4ec88ee410822033f111132acf624ee300008bc9beb06920782e7ebe7f49"
+    },
+    {
+      "path": "skills_M1/provide-emotional-support_SKILL.md",
+      "source": "skills_M1/provide-emotional-support_SKILL.md",
+      "sha256": "2d6f6c43727b2331ab39f5c36c668fd044541fbc69c724eb959495d1ae34863e"
+    },
+    {
+      "path": "skills_M1/provide-formative-feedback_SKILL.md",
+      "source": "skills_M1/provide-formative-feedback_SKILL.md",
+      "sha256": "711a12617bb9e2c95d2b2d3c36e2ed07bc4c5b19a9f9ef8e5ee7671e2a252496"
+    },
+    {
+      "path": "skills_M1/reflect-on-pedagogy_SKILL.md",
+      "source": "skills_M1/reflect-on-pedagogy_SKILL.md",
+      "sha256": "4fce0fade63c272c43178fbcc30ea0c02f7bf407347826d82b29042dcb7f41dc"
+    },
+    {
+      "path": "skills_M1/scaffold-and-release_SKILL.md",
+      "source": "skills_M1/scaffold-and-release_SKILL.md",
+      "sha256": "4899e77397f4e6f03143515fdf37fcf0b58d91d6973e29847bcad68f06bbd1f9"
+    },
+    {
+      "path": "skills_M1/set-learning-objectives_SKILL.md",
+      "source": "skills_M1/set-learning-objectives_SKILL.md",
+      "sha256": "95cfb43c651f2a455082916e8ccb92b02fbbc84e78078ce1584961c4dc05aecf"
+    },
+    {
+      "path": "skills_M1/transform-content_SKILL.md",
+      "source": "skills_M1/transform-content_SKILL.md",
+      "sha256": "9bf104b7c690ae877b16c0371bbd4d0e7642f754f87cfaccad7f16a8228946e5"
+    },
+    {
+      "path": "space_bridge.py",
+      "source": "space_bridge.py",
+      "sha256": "b9c248bc86c61c31d2778b83e60602a92218002af66f65ada18b88a72491d4e9"
+    },
+    {
+      "path": "sqlserver_store.py",
+      "source": "sqlserver_store.py",
+      "sha256": "f25dc84d65b7ad94c36a13571f5d919ec1e5cf4838e480c9d4fda31481159242"
+    },
+    {
+      "path": "stage_tracker.py",
+      "source": "stage_tracker.py",
+      "sha256": "f8a4a2cda1ce6620dc5ed80de9e72923c14b9689b04776f4c1c1c107c8a5f95b"
+    },
+    {
+      "path": "stages.py",
+      "source": "stages.py",
+      "sha256": "819457004e5076d6c91d6b8fcfe9c177b9e613b3060d9084868ee9a668a606fd"
+    },
+    {
+      "path": "structured_output.py",
+      "source": "structured_output.py",
+      "sha256": "62cb90c030e0d034adb37ca167beabd41903f59728444ffea1e2252b631407b6"
+    },
+    {
+      "path": "student_assets.py",
+      "source": "student_assets.py",
+      "sha256": "56a698ab2a58f7d998004e07190ed0855a500bf290a447a171b84526fa41178a"
+    },
+    {
+      "path": "study_protocol.py",
+      "source": "study_protocol.py",
+      "sha256": "ba08d6f87030570d0964983a780955582398efa7ae9bef7e5ae7e434e736e8a4"
+    },
+    {
+      "path": "tutor_actions.py",
+      "source": "tutor_actions.py",
+      "sha256": "4edc8a2ece9c55c7d6b45a4d4cdb1d914fe03ab86a5d6982ed610ebd60338d5f"
+    },
+    {
+      "path": "web_access.py",
+      "source": "web_access.py",
+      "sha256": "89cc5a7e95e0d652ace529b4599ae5c262039aa4606295910ec688d2cfa8c34c"
+    },
+    {
+      "path": "web_sessions.py",
+      "source": "web_sessions.py",
+      "sha256": "2d83f76a797147fc4c681dca55eda1221edbb4707eedb372dc7f80e207def5c5"
+    }
+  ],
+  "description": "Public-source v12 handoff with private resource bindings replaced by placeholders. This is not a byte-identical copy of the deployed private configuration. Configure private reference bindings and use a new protocol version before a new deployment."
+}

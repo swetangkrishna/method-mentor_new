@@ -1,26 +1,40 @@
-Shulman (1986, 1987) → 3 skills
-transform-content — the six-step pedagogical reasoning cycle for re-encoding a concept for a specific learner. identify-misconceptions — a four-step diagnosis procedure that targets the root false belief, not the surface error. reflect-on-pedagogy — Shulman's post-instruction reflection cycle, which also feeds the M2 reward signal.
+# Method Mentor
 
+Method Mentor helps learners discuss and justify research-method choices with Aoife. The live website is a **researcher rehearsal using fictional/sample information**, not formal participant recruitment.
 
-Vygotsky + Wood, Bruner & Ross → 2 skills
-diagnose-zpd — probes both edges of the ZPD (what the learner can do alone vs. with support) before pitching instruction. scaffold-and-release — a five-level support ladder with explicit fade and transfer testing.
+Website: https://swetang-krishna-method-mentor-students.hf.space/
 
+## Current status
 
-Hattie (2009) → 3 skills
-Each maps to one of his highest effect-size findings: provide-formative-feedback (d=0.73, three-level model: task/process/self-regulation), set-learning-objectives (d=0.75, learning intention + success criteria), encourage-metacognition (d=0.69, five question types for self-monitoring).
+Rehearsal `selftest-2026-11-07-reliability-v12` is deployed. Azure SQL readback verified accepted messages, tutor events, consent, error diagnostics, feedback and the separate final assessment/SUS save. Fresh-browser recovery passed. The repository suite ran 98 checks: 97 passed and one optional live SQL integration check was skipped.
 
+**A benign diary-participation sentence still triggers the provider’s request filter.** V12 preserves the earlier conversation and pending input and records the incident; it does not remove that block. See the verification report and prepared, unsubmitted provider incident. Long-idle/process-replacement acceptance remains incomplete.
 
-Kolb et al. (2014) → 2 skills
-facilitate-discussion — six facilitator behaviours that keep the learner talking and the agent out of the way. design-learning-experience — full four-mode Kolb cycle (CE → RO → AC → AE) as an instructional design template.
+## Guides
 
+- [User guide](docs/USER_GUIDE.md)
+- [Developer operations, logging, storage and recovery](docs/DEVELOPER_OPERATIONS.md)
+- [Experimentation and policy-learning guide](docs/EXPERIMENTATION.md)
+- [Verification report and limitations](docs/VERIFICATION_REPORT.md)
+- [Provider incident draft — not submitted](docs/PROVIDER_INCIDENT.md)
+- [Original authored-skill overview](docs/AUTHORED_SKILLS.md)
 
-Kram (1983, 1985) → 3 skills
-One from career functions: assign-stretch-tasks (challenging assignments, with a six-rung difficulty ladder). Two from psychosocial functions: provide-emotional-support (counselling — acknowledge before anything else) and confirm-competence (acceptance and confirmation — evidence-based, not praise).
+## Local verification
 
+Use Python 3.12 in a virtual environment. Install `requirements-dev.txt`, then run:
 
-Clutterbuck (2004) → 2 skills
-challenge-assumptions — the critical friend role with five examining question types. probe-intended-decisions — the sounding board role with seven decision dimensions and explicit return of evaluation to the learner.
+```sh
+PYTHONDONTWRITEBYTECODE=1 python tests/run_release_checks.py
+```
 
+The checks use isolated temporary stores and mocked inference; they do not require live credentials. Never configure the optional integration test against the live study database: that test writes and deletes test records. Historical text-prefix scripts predate the current JSON protocol; the versioned runner selects the current checks.
 
-Biggs & Tang (2011) → 1 skill
-align-outcomes-activities-assessment — maps all three lesson plan components to Bloom levels, identifies misalignment type, and offers two concrete revision options.
+## Reproduce the hosted release
+
+The root also contains legacy experiment utilities. To package the reviewed public runtime, use the pinned, hash-verified allowlist:
+
+```sh
+python deploy/package_release.py --output /private/tmp/method-mentor-v12-runtime
+```
+
+Choose a new empty output path. Private reference bindings are placeholders and the source is not byte-identical to the deployed private configuration. Configure those bindings and allocate a new protocol version before a new deployment. The package contains only reviewed runtime code, authored skills, example RAG metadata and hosting configuration; it excludes tests, documents, databases, private records, secrets and RAG chunks. Configure private credentials/protocol through the hosting secret store. Packaging does not upload or activate a release. Changing frozen code/configuration requires a new protocol version and review. See the developer guide before operating against live storage.
